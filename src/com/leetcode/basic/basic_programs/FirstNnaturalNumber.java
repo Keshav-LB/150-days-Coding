@@ -1,4 +1,4 @@
-package com.leetcode.basic.programs;
+package com.leetcode.basic.basic_programs;
 
 public class FirstNnaturalNumber {
 	public static void main(String[] args) {
