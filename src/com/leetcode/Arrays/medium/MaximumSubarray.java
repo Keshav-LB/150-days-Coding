@@ -16,10 +16,12 @@ public class MaximumSubarray {
 		int []nums1 = {-2,1,-3,4,-1,2,1,-5,4};
 		int []nums2 = {5,4,-1,7,8};
 		int []nums3 = {1};
+		int []nums4 = {-2, -3, -7, -2, -10, -4};
 		
 		System.out.println(maxSubArray(nums1));
 		System.out.println(maxSubArray(nums2));
 		System.out.println(maxSubArray(nums3));
+		System.out.println(maxSubArray(nums4));
 	}
 	public static int maxSubArray(int []nums) {
 		int maxSum = nums[0];
