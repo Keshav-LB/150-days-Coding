@@ -6,16 +6,19 @@ import java.util.PriorityQueue;
 public class KthSmallestElement {
 	public static void main(String[] args) {
 		int[] nums = {3, 2, 3, 1, 2, 4, 5, 5, 6};
-		int k = 4;
+		int k = 5;
 		
-		PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+		System.out.println(k+" smallest : "+kthSmallest(nums, k));
+	}
+	public static int kthSmallest(int []nums, int k) {
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(Collections.reverseOrder());
 		
 		for(int num : nums) {
-			pq.add(num);	
+			pq.add(num);
 			if(pq.size()>k) {
 				pq.poll();
 			}
 		}
-		System.out.println(pq.peek());
+		return pq.peek();
 	}
 }
