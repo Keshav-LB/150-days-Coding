@@ -1,5 +1,6 @@
 package com.leetcode.Strings.easy;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ValidAnagram {
@@ -8,41 +9,59 @@ public class ValidAnagram {
 //		Output: true
 //		Input: s = "rat", t = "car"
 //		Output: false
-		String s = "anagram", t = "nagaram";
-		System.out.println(isAnagram(s, t));	
+		String s1 = "anagram", t1 = "nagaram";
+		String s2 = "rat", t2 = "car";
+		System.out.println(isAnagram(s1, t1));
+		System.out.println(isAnagram(s2, t2));
 	}
-
-	public static boolean isAnagram(String s, String t) {
-		if (s.length() != t.length()) {
-			return false;
-		}
-		
-//		//1st method:
-//		int[] count = new int[26];
-//		for (int i = 0; i < s.length(); i++) {
+	
+//	//1st method (based on sorting the elements)
+//	public static boolean isAnagram(String s, String t) {
+//		if(s.length() != t.length()) {
+//			return false;
+//		}
+//		char []sarr = s.toCharArray();
+//		char []tarr = t.toCharArray();
+//		Arrays.sort(sarr);
+//		Arrays.sort(tarr);
+//		return Arrays.equals(sarr, tarr);
+//	}
+	
+//	//2nd method(frequency count):
+//	public static boolean isAnagram(String s, String t) {
+//		if(s.length()!=t.length()) {
+//			return false;
+//		}
+//		int count[] = new int[26];
+//		for(int i=0;i<s.length();i++) {
 //			count[s.charAt(i) - 'a']++;
 //			count[t.charAt(i) - 'a']--;
 //		}
-//		for (int c : count) {
-//			if (c != 0)
+//		for(int c : count) {
+//			if(c!=0) {
 //				return false;
+//			}
 //		}
 //		return true;
+//	}
+	
+	//3rd method (based on unicode char)
+	public static boolean isAnagram(String s, String t) {
+		if(s.length() != t.length()) return false;
 		
-		//2nd method:
-		HashMap<Character, Integer> countMap = new HashMap<>();
-		for (char c : s.toCharArray()) {
-            countMap.put(c, countMap.getOrDefault(c, 0) + 1);
-        }
-		for (char c : t.toCharArray()) {
-            if (!countMap.containsKey(c)) 
-            	return false;
-
-            countMap.put(c, countMap.get(c) - 1);
-            if (countMap.get(c) == 0) {
-                countMap.remove(c);  // Clean up if count becomes 0
-            }
-        }
-		return countMap.isEmpty();
+		HashMap<Character, Integer> map = new HashMap<>();
+		
+		for(char c: s.toCharArray()) {
+			map.put(c, map.getOrDefault(c, 0)+1);
+		}
+		
+		for(char c :t.toCharArray()) {
+			if(!map.containsKey(c)) return false;
+			map.put(c, map.get(c)-1);
+			if(map.get(c)==0) map.remove(c);
+		}
+		
+		return map.isEmpty();
 	}
 }
+
