@@ -1,0 +1,40 @@
+SQL> select * from employee;
+
+        ID     SALARY
+---------- ----------
+         1        100
+         2        200
+         3        300
+         4        400
+         5        600
+         6        500
+
+6 rows selected.
+
+SQL> create or replace function getNthHighestSalary(n in number)
+  2  return employee.salary%type
+  3  is
+  4  result employee.salary%type;
+  5  begin
+  6  select salary
+  7  into result
+  8  from(
+  9  select distinct salary, dense_rank() over(order by salary desc) as rnk
+ 10  from employee)
+ 11  where rnk = n;
+ 12  return result;
+ 13  exception
+ 14  when no_data_found then
+ 15  return null;
+ 16  end;
+ 17  /
+
+Function created.
+
+SQL> select getNthHighestSalary(2) from dual;
+
+GETNTHHIGHESTSALARY(2)
+----------------------
+                   500
+
+SQL>
