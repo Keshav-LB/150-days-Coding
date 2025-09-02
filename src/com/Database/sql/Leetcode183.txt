@@ -1,0 +1,60 @@
+SQL> create table customers(id number primary key, name varchar2(30));
+
+Table created.
+
+SQL> insert into customers values(1, 'Joe');
+
+1 row created.
+
+SQL> insert into customers values(2, 'Henry');
+
+1 row created.
+
+SQL> insert into customers values(3, 'Sam');
+
+1 row created.
+
+SQL> insert into customers values(4, 'Max');
+
+1 row created.
+
+SQL> select * from customers;
+
+        ID NAME
+---------- ------------------------------
+         1 Joe
+         2 Henry
+         3 Sam
+         4 Max
+
+SQL> create table orders(id number primary key, customerId number, constraint fk_customer foreign key(customerId) references customers(id));
+
+Table created.
+
+SQL> INSERT INTO Orders (id, customerId) VALUES (1, 3);
+
+1 row created.
+
+SQL> INSERT INTO Orders (id, customerId) VALUES (2, 1);
+
+1 row created.
+
+SQL> select * from orders;
+
+        ID CUSTOMERID
+---------- ----------
+         1          3
+         2          1
+
+SQL> select c.name as customers
+  2  from customers c
+  3  left join orders o
+  4  on c.id = o.customerid
+  5  where o.id is null;
+
+CUSTOMERS
+------------------------------
+Henry
+Max
+
+
