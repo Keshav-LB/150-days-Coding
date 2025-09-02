@@ -1,0 +1,39 @@
+SQL> create table employee(id number primary key, name varchar2(15), salary number, managerId number);
+
+Table created.
+
+SQL> insert into employee values(1, 'Joe', 70000, 3);
+
+1 row created.
+
+SQL> insert into employee values(2, 'Henry', 80000, 4);
+
+1 row created.
+
+SQL> insert into employee values(3, 'Sam', 60000, NULL);
+
+1 row created.
+
+SQL> insert into employee values(4, 'Max', 90000, NULL);
+
+1 row created.
+
+
+SQL> select * from employee;
+
+        ID NAME                SALARY  MANAGERID
+---------- --------------- ---------- ----------
+         1 Joe                  70000          3
+         2 Henry                80000          4
+         3 Sam                  60000
+         4 Max                  90000
+
+SQL> select e.name as employee
+  2  from employee e
+  3  join employee m
+  4  on(e.managerid = m.id)
+  5  where e.salary > m.salary;
+
+EMPLOYEE
+---------------
+Joe
