@@ -1,0 +1,69 @@
+SQL> create table department (id number primary key, name varchar2(10) not null);
+
+Table created.
+
+SQL> insert into department values(1, 'IT');
+SQL> insert into department values(2, 'Sales');
+
+SQL> select * from department;
+
+        ID NAME
+---------- ----------
+         1 IT
+         2 Sales
+
+SQL> create table employee(id number primary key, name varchar2(25), salary number, departmentId,
+  2  constraint fk_deptId foreign key (departmentId) references department(id));
+
+Table created.
+
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (1, 'Joe', 85000, 1);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (2, 'Henry', 80000, 2);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (3, 'Sam', 60000, 2);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (4, 'Max', 90000, 1);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (5, 'Janet', 69000, 1);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (6, 'Randy', 85000, 1);
+SQL> INSERT INTO Employee (id, name, salary, departmentId) VALUES (7, 'Will', 70000, 1);
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> select * from employee;
+
+        ID NAME                          SALARY DEPARTMENTID
+---------- ------------------------- ---------- ------------
+         1 Joe                            85000            1
+         2 Henry                          80000            2
+         3 Sam                            60000            2
+         4 Max                            90000            1
+         5 Janet                          69000            1
+         6 Randy                          85000            1
+         7 Will                           70000            1
+
+7 rows selected.
+
+SQL> SELECT d.name AS Department,
+  2         e.name AS Employee,
+  3         e.salary AS Salary
+  4  FROM (
+  5      SELECT e.*,
+  6             DENSE_RANK() OVER (PARTITION BY e.departmentId ORDER BY e.salary DESC) AS rnk
+  7      FROM Employee e
+  8  ) e
+  9  JOIN Department d
+ 10    ON e.departmentId = d.id
+ 11  WHERE e.rnk <= 3;
+
+DEPARTMENT EMPLOYEE                      SALARY
+---------- ------------------------- ----------
+IT         Max                            90000
+IT         Joe                            85000
+IT         Randy                          85000
+IT         Will                           70000
+Sales      Henry                          80000
+Sales      Sam                            60000
+
+6 rows selected.
+
+SQL>
