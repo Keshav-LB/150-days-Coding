@@ -1,0 +1,95 @@
+SQL> create table salesPerson(
+  2  sales_id number primary key,
+  3  name varchar2(20),
+  4  salary number,
+  5  commission_rate number,
+  6  hire_date date
+  7  );
+
+Table created.
+
+SQL> create table company(
+  2  com_id number primary key,
+  3  name varchar2(20),
+  4  city varchar2(20)
+  5  );
+
+Table created.
+
+SQL> create table orders(
+  2  order_id number primary key,
+  3  order_date date,
+  4  com_id number,
+  5  sales_id number,
+  6  amount number,
+  7  constraint fk_comId foreign key(com_id) references company(com_id),
+  8  constraint fk_salesId foreign key(sales_id) references salesPerson(sales_id)
+  9  );
+
+Table created.
+
+
+-- Insert into SalesPerson
+INSERT INTO SalesPerson VALUES (1, 'John', 100000, 6, TO_DATE('2006-04-01', 'YYYY-MM-DD'));
+INSERT INTO SalesPerson VALUES (2, 'Amy', 12000, 5, TO_DATE('2010-05-01', 'YYYY-MM-DD'));
+INSERT INTO SalesPerson VALUES (3, 'Mark', 65000, 12, TO_DATE('2008-12-25', 'YYYY-MM-DD'));
+INSERT INTO SalesPerson VALUES (4, 'Pam', 25000, 25, TO_DATE('2005-01-01', 'YYYY-MM-DD'));
+INSERT INTO SalesPerson VALUES (5, 'Alex', 5000, 10, TO_DATE('2007-02-03', 'YYYY-MM-DD'));
+
+-- Insert into Company
+INSERT INTO Company VALUES (1, 'RED', 'Boston');
+INSERT INTO Company VALUES (2, 'ORANGE', 'New York');
+INSERT INTO Company VALUES (3, 'YELLOW', 'Boston');
+INSERT INTO Company VALUES (4, 'GREEN', 'Austin');
+
+-- Insert into Orders
+INSERT INTO Orders VALUES (1, TO_DATE('2014-01-01', 'YYYY-MM-DD'), 3, 4, 10000);
+INSERT INTO Orders VALUES (2, TO_DATE('2014-02-01', 'YYYY-MM-DD'), 4, 5, 5000);
+INSERT INTO Orders VALUES (3, TO_DATE('2014-03-01', 'YYYY-MM-DD'), 1, 1, 50000);
+INSERT INTO Orders VALUES (4, TO_DATE('2014-04-01', 'YYYY-MM-DD'), 1, 4, 25000);
+
+COMMIT;
+
+SQL> select * from salesPerson;
+
+  SALES_ID NAME                SALARY COMMISSION_RATE HIRE_DATE
+---------- --------------- ---------- --------------- ---------
+         1 John                100000               6 01-APR-06
+         2 Amy                  12000               5 01-MAY-10
+         3 Mark                 65000              12 25-DEC-08
+         4 Pam                  25000              25 01-JAN-05
+         5 Alex                  5000              10 03-FEB-07
+
+SQL> select * from company;
+
+    COM_ID NAME            CITY
+---------- --------------- --------------------
+         1 RED             Boston
+         2 ORANGE          New York
+         3 YELLOW          Boston
+         4 GREEN           Austin
+
+SQL> select * from orders;
+
+  ORDER_ID ORDER_DAT     COM_ID   SALES_ID     AMOUNT
+---------- --------- ---------- ---------- ----------
+         1 01-JAN-14          3          4      10000
+         2 01-FEB-14          4          5       5000
+         3 01-MAR-14          1          1      50000
+         4 01-APR-14          1          4      25000
+
+
+SQL> select s.name
+  2  from salesPerson s
+  3  where s.sales_Id not in (
+  4  select o.sales_Id
+  5  from orders o
+  6  join company c
+  7  on o.com_id = c.com_id
+  8  where c.name = 'RED');
+
+NAME
+---------------
+Amy
+Mark
+Alex
