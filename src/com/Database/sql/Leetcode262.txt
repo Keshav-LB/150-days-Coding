@@ -1,0 +1,89 @@
+SQL> create table users(
+  2  users_id number primary key,
+  3  banned varchar2(3) check(banned in ('Yes', 'No')),
+  4  role varchar2(10) check(role in ('client','driver','partner'))
+  5  );
+
+INSERT INTO Users (users_id, banned, role) VALUES (1, 'No', 'client');
+INSERT INTO Users (users_id, banned, role) VALUES (2, 'Yes', 'client');
+INSERT INTO Users (users_id, banned, role) VALUES (3, 'No', 'client');
+INSERT INTO Users (users_id, banned, role) VALUES (4, 'No', 'client');
+INSERT INTO Users (users_id, banned, role) VALUES (10, 'No', 'driver');
+INSERT INTO Users (users_id, banned, role) VALUES (11, 'No', 'driver');
+INSERT INTO Users (users_id, banned, role) VALUES (12, 'No', 'driver');
+INSERT INTO Users (users_id, banned, role) VALUES (13, 'No', 'driver');
+
+commit;
+
+SQL> select * from users;
+
+  USERS_ID BAN ROLE
+---------- --- ----------
+         1 No  client
+         2 Yes client
+         3 No  client
+         4 No  client
+        10 No  driver
+        11 No  driver
+        12 No  driver
+        13 No  driver
+
+SQL> create table trips ( id number primary key,
+  2  client_id number, driver_id number, city_id number,
+  3  status varchar2(20) check(status in ('completed', 'cancelled_by_driver', 'cancelled_by_client')),
+  4  request_at date,
+  5  foreign key (client_id) references users(users_id),
+  6  foreign key (driver_id) references users(users_id)
+  7  );
+
+Table created.
+
+insert into trips values(1, 1, 10, 1, 'completed', to_date('2013-10-01','YYYY-MM-DD'));
+insert into trips values(2, 2, 11, 1, 'cancelled_by_driver', to_date('2013-10-01','YYYY-MM-DD'));
+insert into trips values(3, 3, 12, 6, 'completed', to_date('2013-10-01','YYYY-MM-DD'));
+insert into trips values(4, 4, 13, 6, 'cancelled_by_client', to_date('2013-10-01','YYYY-MM-DD'));
+insert into trips values(5, 1, 10, 1, 'completed', to_date('2013-10-02','YYYY-MM-DD'));
+insert into trips values(6, 2, 11, 6, 'completed', to_date('2013-10-02','YYYY-MM-DD'));
+insert into trips values(7, 3, 12, 6, 'completed', to_date('2013-10-02','YYYY-MM-DD'));
+insert into trips values(8, 2, 12, 12, 'completed', to_date('2013-10-03','YYYY-MM-DD'));
+insert into trips values(9, 3, 10, 12, 'completed', to_date('2013-10-03','YYYY-MM-DD'));
+insert into trips values(10, 4, 13, 12, 'cancelled_by_driver', to_date('2013-10-03','YYYY-MM-DD'));
+
+SQL> select * from trips;
+
+     ID  CLIENT_ID  DRIVER_ID    CITY_ID STATUS               REQUEST_A
+------- ---------- ---------- ---------- -------------------- ---------
+      1          1         10          1 completed            01-OCT-13
+      2          2         11          1 cancelled_by_driver  01-OCT-13
+      3          3         12          6 completed            01-OCT-13
+      4          4         13          6 cancelled_by_client  01-OCT-13
+      5          1         10          1 completed            02-OCT-13
+      6          2         11          6 completed            02-OCT-13
+      7          3         12          6 completed            02-OCT-13
+      8          2         12         12 completed            03-OCT-13
+      9          3         10         12 completed            03-OCT-13
+     10          4         13         12 cancelled_by_driver  03-OCT-13
+
+10 rows selected.
+
+SQL> select
+  2  to_char(t.request_at, 'YYYY-MM-DD') as day,
+  3  round(
+  4  sum(case when t.status in ('cancelled_by_driver','cancelled_by_client') then 1 else 0 end)*1.0
+  5  /count(*),
+  6  2
+  7  ) as "cancellation rate"
+  8  from trips t
+  9  join users uc on t.client_id = uc.users_id and uc.banned='No'
+ 10  join users ud on t.driver_id = ud.users_id and ud.banned='No'
+ 11  where t.request_at between date '2013-10-01' and date '2013-10-03'
+ 12  group by t.request_at
+ 13  order by t.request_at;
+
+DAY        CANCELLATION RATE
+---------- -----------------
+2013-10-01               .33
+2013-10-02                 0
+2013-10-03                .5
+
+SQL>
