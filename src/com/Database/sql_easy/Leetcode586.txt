@@ -1,0 +1,41 @@
+
+SQL> create table orders(
+  2  order_number number primary key,
+  3  customer_number number not null);
+
+Table created.
+
+SQL> insert into orders values(1, 1);
+
+1 row created.
+
+SQL> insert into orders values(2, 2);
+
+1 row created.
+
+SQL> insert into orders values(3, 3);
+
+1 row created.
+
+SQL> insert into orders values(4, 3);
+
+1 row created.
+
+SQL> select * from orders;
+
+ORDER_NUMBER CUSTOMER_NUMBER
+------------ ---------------
+           1               1
+           2               2
+           3               3
+           4               3
+
+
+SQL> select customer_number from (
+  2  select customer_number, count(*) from orders group by customer_number order by 2 desc)
+  3  where rownum = 1;
+
+CUSTOMER_NUMBER
+---------------
+              3
+
