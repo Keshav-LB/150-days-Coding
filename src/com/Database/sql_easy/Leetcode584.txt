@@ -1,0 +1,36 @@
+SQL> create table customer ( id number primary key,
+  2  name varchar2(10) not null,
+  3  referee_id number);
+
+Table created.
+
+SQL> insert into customer values (1, 'Will', null);
+SQL> insert into customer values (2, 'Jane', null);
+SQL> insert into customer values (3, 'Alex', 2);
+SQL> insert into customer values (4, 'Bill', null);
+SQL> insert into customer values (5, 'Zack', 1);
+SQL> insert into customer values (6, 'Mark', 2);
+
+SQL> select * from customer;
+
+     ID NAME       REFEREE_ID
+------- ---------- ----------
+      1 Will
+      2 Jane
+      3 Alex                2
+      4 Bill
+      5 Zack                1
+      6 Mark                2
+
+6 rows selected.
+
+SQL> select name from customer where referee_id <> 2 or referee_id is null;
+
+NAME
+----------
+Will
+Jane
+Bill
+Zack
+
+
