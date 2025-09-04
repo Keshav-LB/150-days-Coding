@@ -1,0 +1,52 @@
+SQL> create table courses (
+  2  student varchar2(25),
+  3  class varchar2(25),
+  4  primary key (student, class)
+  5  );
+
+Table created.
+
+insert into courses values('A', 'Math');
+insert into courses values('B', 'English');
+insert into courses values('C', 'Math');
+insert into courses values('D', 'Biology');
+insert into courses values('E', 'Math');
+insert into courses values('F', 'Computer');
+insert into courses values('G', 'Math');
+insert into courses values('H', 'Math');
+insert into courses values('I', 'Math');
+
+SQL> select * from courses;
+
+STUDENT                   CLASS
+------------------------- -------------------------
+A                         Math
+B                         English
+C                         Math
+D                         Biology
+E                         Math
+F                         Computer
+G                         Math
+H                         Math
+I                         Math
+
+9 rows selected.
+
+
+SQL> select class, count(*) from courses group by class;
+
+CLASS                       COUNT(*)
+------------------------- ----------
+Math                               6
+English                            1
+Biology                            1
+Computer                           1
+
+SQL> select class
+  2  from courses
+  3  group by class
+  4  having count(student) >= 5;
+
+CLASS
+-------------------------
+Math
