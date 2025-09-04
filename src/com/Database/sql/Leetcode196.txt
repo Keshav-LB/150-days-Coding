@@ -1,0 +1,37 @@
+SQL> create table person(id number primary key, email varchar2(25) not null);
+
+Table created.
+
+SQL> insert into person values(1, 'john@example.com');
+
+1 row created.
+
+SQL> insert into person values(2, 'bob@example.com');
+
+1 row created.
+
+SQL> insert into person values(3, 'john@example.com');
+
+1 row created.
+
+SQL> select * from person;
+
+     ID EMAIL
+------- ------------------------------
+      1 john@example.com
+      2 bob@example.com
+      3 john@example.com
+
+SQL> delete from person p1
+  2  where p1.id > (select min(p2.id) from person p2 where p1.email = p2.email);
+
+1 row deleted.
+
+SQL> select * from person;
+
+     ID EMAIL
+------- ------------------------------
+      1 john@example.com
+      2 bob@example.com
+
+SQL>
