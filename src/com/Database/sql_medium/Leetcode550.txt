@@ -1,0 +1,48 @@
+SQL> select * from activity;
+
+ PLAYER_ID  DEVICE_ID EVENT_DAT GAMES_PLAYED
+---------- ---------- --------- ------------
+         1          2 01-MAR-16            5
+         1          2 02-MAY-16            6
+         2          3 25-JUN-17            1
+         3          1 02-MAR-16            0
+         3          4 03-JUL-18            5
+
+SQL> update activity set event_date = to_date('02-MAR-2016','DD-MON-YYYY') where player_id = 1 and event_date = to_date('02-MAY-2016','DD-MON-YYYY');
+
+1 row updated.
+
+SQL> select * from activity;
+
+ PLAYER_ID  DEVICE_ID EVENT_DAT GAMES_PLAYED
+---------- ---------- --------- ------------
+         1          2 01-MAR-16            5
+         1          2 02-MAR-16            6
+         2          3 25-JUN-17            1
+         3          1 02-MAR-16            0
+         3          4 03-JUL-18            5
+
+SQL> SELECT ROUND(num_players * 1.0 / total_players, 2) AS fraction
+  2  FROM (
+  3      -- Numerator: players who logged in the next day
+  4      SELECT COUNT(DISTINCT a.player_id) AS num_players
+  5      FROM activity a
+  6      JOIN (
+  7          SELECT player_id, MIN(event_date) AS first_login
+  8          FROM activity
+  9          GROUP BY player_id
+ 10      ) b
+ 11        ON a.player_id = b.player_id
+ 12       AND a.event_date = b.first_login + 1
+ 13  ) x,
+ 14  (
+ 15      -- Denominator: total distinct players
+ 16      SELECT COUNT(DISTINCT player_id) AS total_players
+ 17      FROM activity
+ 18  ) y;
+
+  FRACTION
+----------
+       .33
+
+SQL>

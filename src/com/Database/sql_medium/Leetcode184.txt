@@ -1,0 +1,77 @@
+SQL> create table department(id number primary key,
+  2  name varchar2(30) NOT NULL);
+
+Table created.
+
+SQL> insert into department values(1, 'IT');
+
+1 row created.
+
+SQL> insert into department values(2, 'Sales');
+
+1 row created.
+
+SQL> select * from department;
+
+        ID NAME
+---------- ------------------------------
+         1 IT
+         2 Sales
+
+SQL> create table employee(id number primary key, name varchar2(15), salary number,
+  2  departmentId number, constraint fk_deptId foreign key(departmentId) references department(id));
+
+Table created.
+
+SQL> insert into employee values(1, 'Joe', 70000, 1);
+
+1 row created.
+
+SQL> insert into employee values(2, 'Jim', 90000, 1);
+
+1 row created.
+
+SQL> insert into employee values(3, 'Henry', 80000, 2);
+
+1 row created.
+
+SQL> insert into employee values(4, 'Sam', 60000, 2);
+
+1 row created.
+
+SQL> insert into employee values(5, 'Max', 90000, 1);
+
+1 row created.
+
+SQL> select * from employee;
+
+        ID NAME                SALARY DEPARTMENTID
+---------- --------------- ---------- ------------
+         1 Joe                  70000            1
+         2 Jim                  90000            1
+         3 Henry                80000            2
+         4 Sam                  60000            2
+         5 Max                  90000            1
+
+
+SQL> select
+  2     d.name as department,
+  3     e.name as employee,
+  4     e.salary as salary
+  5  from employee e
+  6  join department d
+  7     on e.departmentId = d.id
+  8  where e.salary = (
+  9     select max(salary)
+ 10     from employee
+ 11     where departmentId = e.departmentId
+ 12  );
+
+DEPARTMENT                     EMPLOYEE            SALARY
+------------------------------ --------------- ----------
+IT                             Jim                  90000
+Sales                          Henry                80000
+IT                             Max                  90000
+
+
+

@@ -1,0 +1,36 @@
+
+SQL> create table person(id number primary key, email varchar2(50));
+
+Table created.
+
+SQL> insert into person(id, email) values (1, 'a@b.com');
+
+1 row created.
+
+SQL> insert into person(id, email) values (2, 'c@d.com');
+
+1 row created.
+
+SQL> insert into person(id, email) values (3, 'a@b.com');
+
+1 row created.
+
+SQL> select * from person;
+
+        ID EMAIL
+---------- --------------------------------------------------
+         1 a@b.com
+         2 c@d.com
+         3 a@b.com
+
+
+SQL> select email as email
+  2  from person
+  3  group by email
+  4  having count(email)>1;
+
+EMAIL
+--------------------------------------------------
+a@b.com
+
+SQL>

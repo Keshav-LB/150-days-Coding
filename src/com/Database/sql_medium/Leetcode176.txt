@@ -1,0 +1,31 @@
+SQL> create table employee (id number primary key, salary number);
+
+Table created.
+
+SQL> insert into employee values (1,100);
+
+1 row created.
+
+SQL> insert into employee values (2,200);
+
+1 row created.
+
+SQL> insert into employee values (3,300);
+
+1 row created.
+
+SQL> select * from employee;
+
+        ID     SALARY
+---------- ----------
+         1        100
+         2        200
+         3        300
+
+SQL> select max(salary) as secondHighestSalary from employee where salary < (select max(salary) from employee);
+
+SECONDHIGHESTSALARY
+-------------------
+                200
+
+SQL>

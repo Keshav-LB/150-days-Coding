@@ -1,0 +1,64 @@
+175. Combine Two Tables
+=========================
+SQL> desc person;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PERSONID                                  NOT NULL NUMBER
+ FIRSTNAME                                          VARCHAR2(255)
+ LASTNAME                                           VARCHAR2(255)
+
+SQL> select * from person;
+
+  PERSONID FIRSTNAME            LASTNAME
+---------- -------------------- --------------------
+         1 Allen                Wang
+
+SQL> insert into person values(2, 'Bob', 'Alice');
+
+1 row created.
+
+SQL> select * from person;
+
+  PERSONID FIRSTNAME            LASTNAME
+---------- -------------------- --------------------
+         1 Allen                Wang
+         2 Bob                  Alice
+
+
+SQL> desc address;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ADDRESSID                                 NOT NULL NUMBER
+ PERSONID                                           NUMBER
+ CITY                                               VARCHAR2(50)
+ STATE                                              VARCHAR2(50)
+
+SQL> insert into address values (1, 2, 'New York City', 'New York');
+
+1 row created.
+
+SQL> insert into address values (2, 3, 'Leetcode', 'california');
+insert into address values (2, 3, 'Leetcode', 'california')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SYSTEM.FK_PERSON) violated - parent key not
+found
+
+
+SQL> select * from address;
+
+ ADDRESSID   PERSONID	CITY		STATE
+---------- ---------- 	-------  	-----------
+      1          2 	New York City	New York
+
+
+SQL> select p.firstname, p.lastname, a.city, a.state
+  2  from person p left outer join address a
+  3  on (p.personid = a.personid);
+
+FIRSTNAME       LASTNAME        CITY                 STATE
+--------------- --------------- -------------------- ---------------
+Bob             Alice           New York City        New York
+Allen           Wang
+
+
