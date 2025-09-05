@@ -1,0 +1,59 @@
+SQL> create table actorDirector(
+  2  actor_id number,
+  3  director_id number,
+  4  timestamp number primary key);
+
+Table created.
+
+SQL> insert into actorDirector values(1, 1, 0);
+
+1 row created.
+
+SQL> insert into actorDirector values(1, 1, 1);
+
+1 row created.
+
+SQL> insert into actorDirector values(1, 1, 2);
+
+1 row created.
+
+SQL> insert into actorDirector values(1, 2, 3);
+
+1 row created.
+
+SQL> insert into actorDirector values(1, 2, 4);
+
+1 row created.
+
+SQL> insert into actorDirector values(2, 1, 5);
+
+1 row created.
+
+SQL> insert into actorDirector values(2, 1, 6);
+
+1 row created.
+
+SQL> select * from actorDirector;
+
+  ACTOR_ID DIRECTOR_ID  TIMESTAMP
+---------- ----------- ----------
+         1           1          0
+         1           1          1
+         1           1          2
+         1           2          3
+         1           2          4
+         2           1          5
+         2           1          6
+
+7 rows selected.
+
+SQL> select actor_id, director_id
+  2  from actorDirector
+  3  group by actor_id, director_id
+  4  having count(*) >= 3;
+
+  ACTOR_ID DIRECTOR_ID
+---------- -----------
+         1           1
+
+SQL>
