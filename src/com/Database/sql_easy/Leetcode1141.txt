@@ -1,0 +1,85 @@
+SQL> create table activity(
+  2  user_id number,
+  3  session_id number,
+  4  activity_date date,
+  5  activity_type varchar2(20) check (activity_type in ('open_session', 'end_session', 'scroll_down', 'send_message'))
+  6  );
+
+Table created.
+
+
+SQL> insert into activity values (1, 1, to_date('2019-07-20','YYYY-MM-DD'), 'open_session');
+
+1 row created.
+
+SQL> insert into activity values (1, 1, to_date('2019-07-20','YYYY-MM-DD'), 'scroll_down');
+
+1 row created.
+
+SQL> insert into activity values (1, 1, to_date('2019-07-20','YYYY-MM-DD'), 'end_session');
+
+1 row created.
+
+SQL> insert into activity values (2, 4, to_date('2019-07-20','YYYY-MM-DD'), 'open_session');
+
+1 row created.
+
+SQL> insert into activity values (2, 4, to_date('2019-07-21','YYYY-MM-DD'), 'send_message');
+
+1 row created.
+
+SQL> insert into activity values (2, 4, to_date('2019-07-21','YYYY-MM-DD'), 'end_session');
+
+1 row created.
+
+SQL> insert into activity values (3, 2, to_date('2019-07-21','YYYY-MM-DD'), 'open_session');
+
+1 row created.
+
+SQL> insert into activity values (3, 2, to_date('2019-07-21','YYYY-MM-DD'), 'send_message');
+
+1 row created.
+
+SQL> insert into activity values (3, 2, to_date('2019-07-21','YYYY-MM-DD'), 'end_session');
+
+1 row created.
+
+SQL> insert into activity values (4, 3, to_date('2019-06-25','YYYY-MM-DD'), 'open_session');
+
+1 row created.
+
+SQL> insert into activity values (4, 3, to_date('2019-06-25','YYYY-MM-DD'), 'end_session');
+
+1 row created.
+
+SQL> select * from activity;
+
+   USER_ID SESSION_ID ACTIVITY_ ACTIVITY_TYPE
+---------- ---------- --------- --------------------
+         1          1 20-JUL-19 open_session
+         1          1 20-JUL-19 scroll_down
+         1          1 20-JUL-19 end_session
+         2          4 20-JUL-19 open_session
+         2          4 21-JUL-19 send_message
+         2          4 21-JUL-19 end_session
+         3          2 21-JUL-19 open_session
+         3          2 21-JUL-19 send_message
+         3          2 21-JUL-19 end_session
+         4          3 25-JUN-19 open_session
+         4          3 25-JUN-19 end_session
+
+11 rows selected.
+
+
+SQL> SELECT
+  2      TO_CHAR(activity_date, 'YYYY-MM-DD') AS day,
+  3      COUNT(DISTINCT user_id) AS active_users
+  4  FROM Activity
+  5  WHERE activity_date BETWEEN DATE '2019-06-28' AND DATE '2019-07-27'
+  6  GROUP BY TO_CHAR(activity_date, 'YYYY-MM-DD')
+  7  ORDER BY day;
+
+DAY        ACTIVE_USERS
+---------- ------------
+2019-07-20            2
+2019-07-21            2
