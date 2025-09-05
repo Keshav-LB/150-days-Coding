@@ -1,0 +1,89 @@
+SQL> create table product(
+  2  product_id number primary key,
+  3  product_name varchar2(20),
+  4  unit_price number
+  5  );
+
+Table created.
+
+SQL> create table sales(
+  2  seller_id number,
+  3  product_id number,
+  4  buyer_id number,
+  5  sale_date date,
+  6  quantity number,
+  7  price number,
+  8  constraint fk_prodId foreign key(product_id) references product(product_id)
+  9  );
+
+Table created.
+
+SQL> insert into product values(1, 'S8', 1000);
+
+1 row created.
+
+SQL> insert into product values(2, 'G4', 800);
+
+1 row created.
+
+SQL> insert into product values(3, 'iPhone', 1400);
+
+1 row created.
+
+SQL> insert into sales values(1, 1, 1, to_date('2019-01-21','YYYY-MM-DD'), 2, 2000);
+
+1 row created.
+
+SQL> insert into sales values(1, 2, 2, to_date('2019-02-17','YYYY-MM-DD'), 1, 800);
+
+1 row created.
+
+SQL> insert into sales values(2, 2, 3, to_date('2019-06-02','YYYY-MM-DD'), 1, 800);
+
+1 row created.
+
+SQL> insert into sales values(3, 3, 4, to_date('2019-05-13','YYYY-MM-DD'), 2, 2800);
+
+1 row created.
+
+SQL> select * from product;
+
+PRODUCT_ID PRODUCT_NAME         UNIT_PRICE
+---------- -------------------- ----------
+         1 S8                         1000
+         2 G4                          800
+         3 iPhone                     1400
+
+SQL> select * from sales;
+
+ SELLER_ID PRODUCT_ID   BUYER_ID SALE_DATE   QUANTITY      PRICE
+---------- ---------- ---------- --------- ---------- ----------
+         1          1          1 21-JAN-19          2       2000
+         1          2          2 17-FEB-19          1        800
+         2          2          3 02-JUN-19          1        800
+         3          3          4 13-MAY-19          2       2800
+
+
+
+
+
+SQL> SELECT DISTINCT
+  2         p.product_id,
+  3         p.product_name
+  4  FROM Product p
+  5  JOIN Sales s
+  6    ON p.product_id = s.product_id
+  7  WHERE s.sale_date BETWEEN DATE '2019-01-01' AND DATE '2019-03-31'
+  8    AND p.product_id NOT IN (
+  9          SELECT product_id
+ 10          FROM Sales
+ 11          WHERE sale_date < DATE '2019-01-01'
+ 12             OR sale_date > DATE '2019-03-31'
+ 13    );
+
+
+PRODUCT_ID PRODUCT_NAME
+---------- --------------------
+         1 S8
+
+
