@@ -1,0 +1,39 @@
+
+SQL> create table triangle (
+  2  x number,
+  3  y number,
+  4  z number,
+  5  primary key(x, y, z));
+
+Table created.
+
+
+SQL> insert into triangle values(13, 15, 30);
+
+1 row created.
+
+SQL> insert into triangle values(10, 20, 15);
+
+1 row created.
+
+SQL> select * from triangle;
+
+         X          Y          Z
+---------- ---------- ----------
+        13         15         30
+        10         20         15
+
+SQL> select x, y, z,
+  2  case
+  3  when x+y > z and y+z > x and x+z > y
+  4  then 'Yes'
+  5  else 'No'
+  6  end as triangle
+  7  from triangle;
+
+         X          Y          Z TRI
+---------- ---------- ---------- ---
+        13         15         30 No
+        10         20         15 Yes
+
+SQL>
