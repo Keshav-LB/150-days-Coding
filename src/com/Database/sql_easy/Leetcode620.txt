@@ -1,0 +1,55 @@
+SQL> create table cinema(
+  2  id number primary key,
+  3  movie varchar2(25),
+  4  description varchar2(25),
+  5  rating number
+  6  );
+
+Table created.
+
+SQL> insert into cinema values(1, 'War', 'great 3D', 8.9);
+
+1 row created.
+
+SQL> insert into cinema values(2, 'Science', 'fiction', 8.5);
+
+1 row created.
+
+SQL> insert into cinema values(3, 'irish', 'boring', 6.2);
+
+1 row created.
+
+SQL> insert into cinema values(4, 'Ice song', 'Fantacy', 8.6);
+
+1 row created.
+
+SQL> insert into cinema values(5, 'House card', 'Interesting', 9.1);
+
+1 row created.
+
+SQL> select * from cinema;
+
+     ID MOVIE                     DESCRIPTION                   RATING
+------- ------------------------- ------------------------- ----------
+      1 War                       great 3D                         8.9
+      2 Science                   fiction                          8.5
+      3 irish                     boring                           6.2
+      4 Ice song                  Fantacy                          8.6
+      5 House card                Interesting                      9.1
+
+
+SQL> select
+  2  id,
+  3  movie,
+  4  description,
+  5  rating
+  6  from cinema
+  7  where mod(id,2)=1 and description <> 'boring'
+  8  order by rating desc;
+
+     ID MOVIE                     DESCRIPTION                   RATING
+------- ------------------------- ------------------------- ----------
+      5 House card                Interesting                      9.1
+      1 War                       great 3D                         8.9
+
+SQL>
