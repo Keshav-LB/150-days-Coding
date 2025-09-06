@@ -1,0 +1,53 @@
+SQL> create table department(
+  2  id number,
+  3  revenue number,
+  4  month varchar2(10),
+  5  constraint dept_pk primary key(id, month)
+  6  );
+
+Table created.
+
+INSERT INTO Department VALUES (1, 8000, 'Jan');
+INSERT INTO Department VALUES (2, 9000, 'Jan');
+INSERT INTO Department VALUES (3, 10000, 'Feb');
+INSERT INTO Department VALUES (1, 7000, 'Feb');
+INSERT INTO Department VALUES (1, 6000, 'Mar');
+
+SQL> select * from department;
+
+        ID    REVENUE MONTH
+---------- ---------- ----------
+         1       8000 Jan
+         2       9000 Jan
+         3      10000 Feb
+         1       7000 Feb
+         1       6000 Mar
+
+SQL> SELECT *
+  2  FROM Department
+  3  PIVOT (
+  4      SUM(revenue)
+  5      FOR month IN (
+  6          'Jan' AS Jan_Revenue,
+  7          'Feb' AS Feb_Revenue,
+  8          'Mar' AS Mar_Revenue,
+  9          'Apr' AS Apr_Revenue,
+ 10          'May' AS May_Revenue,
+ 11          'Jun' AS Jun_Revenue,
+ 12          'Jul' AS Jul_Revenue,
+ 13          'Aug' AS Aug_Revenue,
+ 14          'Sep' AS Sep_Revenue,
+ 15          'Oct' AS Oct_Revenue,
+ 16          'Nov' AS Nov_Revenue,
+ 17          'Dec' AS Dec_Revenue
+ 18      )
+ 19  )
+ 20  ORDER BY id;
+
++----+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+| ID | Jan_Revenue | Feb_Revenue | Mar_Revenue | Apr_Revenue | May_Revenue | Jun_Revenue | Jul_Revenue | Aug_Revenue | Sep_Revenue | Oct_Revenue | Nov_Revenue | Dec_Revenue |
++----+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+|  1 |    8000     |    7000     |    6000     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |
+|  2 |    9000     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |
+|  3 |    null     |   10000     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |    null     |
++----+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
