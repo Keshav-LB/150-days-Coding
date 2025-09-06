@@ -1,0 +1,57 @@
+SQL> create table queries(
+  2  query_name varchar2(20),
+  3  result varchar2(20),
+  4  position number,
+  5  rating number check (rating between 1 and 5),
+  6  check(position between 1 and 500)
+  7  );
+
+Table created.
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'Golden Retriever', 1, 5);
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'German Shepherd', 2, 5);
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'Mule', 200, 1);
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Shirazi', 5, 2);
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Siamese', 3, 3);
+
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Sphynx', 7, 4);
+
+
+
+SQL> select * from queries;
+
+QUERY_NAME           RESULT                 POSITION     RATING
+-------------------- -------------------- ---------- ----------
+Dog                  Golden Retriever              1          5
+Dog                  German Shepherd               2          5
+Dog                  Mule                        200          1
+Cat                  Shirazi                       5          2
+Cat                  Siamese                       3          3
+Cat                  Sphynx                        7          4
+
+6 rows selected.
+
+
+SQL> select
+  2  query_name,
+  3  round(avg(rating* 1.0 / position), 2) as quality,
+  4  round(100 * sum(case when rating < 3 then 1 else 0 end)/count(*), 2) as poor_query_percentage
+  5  from queries
+  6  group by query_name;
+
+QUERY_NAME              QUALITY POOR_QUERY_PERCENTAGE
+-------------------- ---------- ---------------------
+Dog                         2.5                 33.33
+Cat                         .66                 33.33
+
+SQL>
