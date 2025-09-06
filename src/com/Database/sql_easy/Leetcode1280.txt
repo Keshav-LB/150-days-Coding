@@ -1,0 +1,105 @@
+SQL> create table students(
+  2  student_id number,
+  3  student_name varchar2(20),
+  4  constraint pk_stud primary key(student_id));
+
+Table created.
+
+SQL> create table subjects(
+  2  subject_name varchar2(20) primary key);
+
+Table created.
+
+SQL> create table examinations(
+  2  student_id number,
+  3  subject_name varchar2(20));
+
+Table created.
+
+SQL> insert into students values(1, 'Alice');
+SQL> insert into students values(2, 'Bob');
+SQL> insert into students values(13, 'John');
+SQL> insert into students values(6, 'Alex');
+
+SQL> select * from students;
+
+STUDENT_ID STUDENT_NAME
+---------- --------------------
+         1 Alice
+         2 Bob
+        13 John
+         6 Alex
+
+SQL> insert into subjects values('Math');
+SQL> insert into subjects values('Physics');
+SQL> insert into subjects values('Programming');
+
+SQL> select * from subjects;
+
+SUBJECT_NAME
+--------------------
+Math
+Physics
+Programming
+
+SQL> insert into examinations values(1, 'Math');
+SQL> insert into examinations values(1, 'Physics');
+SQL> insert into examinations values(1, 'Programming');
+SQL> insert into examinations values(2, 'Programming');
+SQL> insert into examinations values(1, 'Physics');
+SQL> insert into examinations values(1, 'Math');
+SQL> insert into examinations values(13, 'Math');
+SQL> insert into examinations values(13, 'Programming');
+SQL> insert into examinations values(13, 'Physics');
+SQL> insert into examinations values(2, 'Math');
+SQL> insert into examinations values(1, 'Math');
+
+SQL> select * from examinations;
+
+STUDENT_ID SUBJECT_NAME
+---------- --------------------
+         1 Math
+         1 Physics
+         1 Programming
+         2 Programming
+         1 Physics
+         1 Math
+        13 Math
+        13 Programming
+        13 Physics
+         2 Math
+         1 Math
+
+11 rows selected.
+
+SQL> SELECT
+  2      s.student_id,
+  3      s.student_name,
+  4      sub.subject_name,
+  5      COUNT(e.subject_name) AS attended_exams
+  6  FROM Students s
+  7  CROSS JOIN Subjects sub
+  8  LEFT JOIN Examinations e
+  9      ON s.student_id = e.student_id
+ 10     AND sub.subject_name = e.subject_name
+ 11  GROUP BY s.student_id, s.student_name, sub.subject_name
+ 12  ORDER BY s.student_id, sub.subject_name;
+
+STUDENT_ID STUDENT_NAME         SUBJECT_NAME         ATTENDED_EXAMS
+---------- -------------------- -------------------- --------------
+         1 Alice                Math                              3
+         1 Alice                Physics                           2
+         1 Alice                Programming                       1
+         2 Bob                  Math                              1
+         2 Bob                  Physics                           0
+         2 Bob                  Programming                       1
+         6 Alex                 Math                              0
+         6 Alex                 Physics                           0
+         6 Alex                 Programming                       0
+        13 John                 Math                              1
+        13 John                 Physics                           1
+
+STUDENT_ID STUDENT_NAME         SUBJECT_NAME         ATTENDED_EXAMS
+---------- -------------------- -------------------- --------------
+        13 John                 Programming                       1
+
