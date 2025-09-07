@@ -1,0 +1,57 @@
+SQL> create table employees(
+  2  id number primary key,
+  3  name varchar2(20)
+  4  );
+
+Table created.
+
+SQL> create table employeeUNI(
+  2  id number,
+  3  unique_id number,
+  4  constraint pk_empUNI primary key(id, unique_id)
+  5  );
+
+Table created.
+
+SQL> insert into employees values(1, 'Alice');
+SQL> insert into employees values(7, 'Bob');
+SQL> insert into employees values(11, 'Meir');
+SQL> insert into employees values(90, 'Winston');
+SQL> insert into employees values(3, 'Jonathan');
+
+SQL> insert into employeeUNI values(3, 1);
+SQL> insert into employeeUNI values(11, 2);
+SQL> insert into employeeUNI values(90, 3);
+
+SQL> select * from employees;
+
+        ID NAME
+---------- --------------------
+         1 Alice
+         7 Bob
+        11 Meir
+        90 Winston
+         3 Jonathan
+
+SQL> select * from employeeUNI;
+
+        ID  UNIQUE_ID
+---------- ----------
+         3          1
+        11          2
+        90          3
+
+SQL> select
+  2  u.unique_id,
+  3  e.name
+  4  from employees e
+  5  left join employeeUNI u
+  6  on e.id = u.id;
+
+ UNIQUE_ID NAME
+---------- --------------------
+         1 Jonathan
+         2 Meir
+         3 Winston
+           Alice
+           Bob
