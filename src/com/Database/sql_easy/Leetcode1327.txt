@@ -1,0 +1,82 @@
+SQL> create table products(
+  2  product_id number,
+  3  product_name varchar2(50),
+  4  product_category varchar2(15),
+  5  constraint pk_product primary key(product_id)
+  6  );
+
+Table created.
+
+SQL> create table orders(
+  2  product_id number,
+  3  order_date date,
+  4  unit number,
+  5  constraint fk_orders foreign key(product_id) references products(product_id)
+  6  );
+
+Table created.
+
+SQL> insert into products values(1, 'Leecode Solutions', 'Book');
+SQL> insert into products values(2, 'Jewels of Stringology', 'Book');
+SQL> insert into products values(3, 'HP', 'Laptop');
+SQL> insert into products values(4, 'Lenovo', 'Laptop');
+SQL> insert into products values(5, 'Leetcode Kit', 'T-shirt');
+
+
+SQL> insert into orders values(1, Date '2020-02-05', 60);
+SQL> insert into orders values(1, Date '2020-02-10', 70);
+SQL> insert into orders values(2, Date '2020-01-18', 30);
+SQL> insert into orders values(2, Date '2020-02-11', 80);
+SQL> insert into orders values(3, Date '2020-02-17', 2);
+SQL> insert into orders values(3, Date '2020-02-24', 3);
+SQL> insert into orders values(4, Date '2020-03-01', 20);
+SQL> insert into orders values(4, Date '2020-03-04', 30);
+SQL> insert into orders values(4, Date '2020-03-04', 60);
+SQL> insert into orders values(5, Date '2020-02-25', 50);
+SQL> insert into orders values(5, Date '2020-02-27', 50);
+SQL> insert into orders values(5, Date '2020-03-01', 50);
+
+
+SQL> select * from products;
+
+PRODUCT_ID PRODUCT_NAME                                       PRODUCT_CATEGOR
+---------- -------------------------------------------------- ---------------
+         1 Leecode Solutions                                  Book
+         2 Jewels of Stringology                              Book
+         3 HP                                                 Laptop
+         4 Lenovo                                             Laptop
+         5 Leetcode Kit                                       T-shirt
+
+SQL> select * from orders;
+
+PRODUCT_ID ORDER_DAT       UNIT
+---------- --------- ----------
+         1 05-FEB-20         60
+         1 10-FEB-20         70
+         2 18-JAN-20         30
+         2 11-FEB-20         80
+         3 17-FEB-20          2
+         3 24-FEB-20          3
+         4 01-MAR-20         20
+         4 04-MAR-20         30
+         4 04-MAR-20         60
+         5 25-FEB-20         50
+         5 27-FEB-20         50
+         5 01-MAR-20         50
+
+
+SQL> select
+  2      p.product_name,
+  3      sum(o.unit) as unit
+  4  from products p
+  5  join orders o
+  6    on p.product_id = o.product_id
+  7  where o.order_date between date '2020-02-01' and date '2020-02-29'
+  8  group by p.product_name
+  9  having sum(o.unit) >= 100;
+
+PRODUCT_NAME                                             UNIT
+-------------------------------------------------- ----------
+Leecode Solutions                                         130
+Leetcode Kit                                              100
+
