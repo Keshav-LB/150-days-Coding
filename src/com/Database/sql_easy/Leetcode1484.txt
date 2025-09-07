@@ -1,0 +1,46 @@
+SQL> create table activities(
+  2  sell_date date,
+  3  product varchar2(50)
+  4  );
+
+Table created.
+
+SQL> insert into activities values(Date '2020-05-30', 'Headphone');
+SQL> insert into activities values(Date '2020-06-01', 'Pencil');
+SQL> insert into activities values(Date '2020-06-02', 'Mask');
+SQL> insert into activities values(Date '2020-05-30', 'Basketball');
+SQL> insert into activities values(Date '2020-06-01', 'Bible');
+SQL> insert into activities values(Date '2020-06-02', 'Mask');
+SQL> insert into activities values(Date '2020-05-30', 'T-Shirt');
+
+SQL> select * from activities;
+
+SELL_DATE PRODUCT
+--------- --------------------------------------------------
+30-MAY-20 Headphone
+01-JUN-20 Pencil
+02-JUN-20 Mask
+30-MAY-20 Basketball
+01-JUN-20 Bible
+02-JUN-20 Mask
+30-MAY-20 T-Shirt
+
+7 rows selected.
+
+select 
+    sell_date,
+    count(distinct product) as num_sold,
+    listagg(product, ',') within group (order by product) as products
+from (
+    select distinct sell_date, product
+    from Activities
+) t
+group by sell_date
+order by sell_date;
+
+
+SELL_DATE                   NUM_SOLD PRODUCTS
+------------------------- ---------- -------------------------
+30-MAY-20                 	    3 Basketball,Headphone,T-Shirt				 
+01-JUN-20                 	    2 Bible,Pencil
+02-JUN-20                 	    1 Mask
