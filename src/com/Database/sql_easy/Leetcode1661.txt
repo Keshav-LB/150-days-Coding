@@ -1,0 +1,82 @@
+
+SQL> create table activity(
+  2  mahine_id number,
+  3  process_id number,
+  4  activity_type varchar2(10) check (activity_type in ('start', 'end')),
+  5  timestamp number,
+  6  constraint pk_activity primary key (mahine_id, process_id, activity_type)
+  7  );
+
+Table created.
+
+SQL> alter table activity rename column mahine_id to machine_id;
+
+Table altered.
+
+
+INSERT INTO Activity VALUES (0, 0, 'start', 0.712);
+INSERT INTO Activity VALUES (0, 0, 'end',   1.520);
+INSERT INTO Activity VALUES (0, 1, 'start', 3.140);
+INSERT INTO Activity VALUES (0, 1, 'end',   4.120);
+
+INSERT INTO Activity VALUES (1, 0, 'start', 0.550);
+INSERT INTO Activity VALUES (1, 0, 'end',   1.550);
+INSERT INTO Activity VALUES (1, 1, 'start', 0.430);
+INSERT INTO Activity VALUES (1, 1, 'end',   1.420);
+
+INSERT INTO Activity VALUES (2, 0, 'start', 4.100);
+INSERT INTO Activity VALUES (2, 0, 'end',   4.512);
+INSERT INTO Activity VALUES (2, 1, 'start', 2.500);
+INSERT INTO Activity VALUES (2, 1, 'end',   5.000);
+
+
+SQL> select * from activity;
+
+MACHINE_ID PROCESS_ID ACTIVITY_T  TIMESTAMP
+---------- ---------- ---------- ----------
+         0          0 start            .712
+         0          0 end              1.52
+         0          1 start            3.14
+         0          1 end              4.12
+
+         1          0 start             .55
+         1          0 end              1.55
+         1          1 start             .43
+         1          1 end              1.42
+
+         2          0 start             4.1
+         2          0 end             4.512
+         2          1 start             2.5
+         2          1 end                 5
+
+12 rows selected.
+
+
+
+SQL> select machine_id,
+  2  round(avg(end_time - start_time), 3) as processing_time
+  3  from(
+  4  select a1.machine_id,
+  5     a1.process_id,
+  6     max(case when a1.activity_type = 'start' then a1.timestamp end) as start_time,
+  7     max(case when a1.activity_type = 'end' then a1.timestamp end) as end_time
+  8     from activity a1
+  9     group by a1.machine_id, a1.process_id
+ 10  )t
+ 11  group by machine_id;
+
+MACHINE_ID PROCESSING_TIME
+---------- ---------------
+         0            .894
+         1            .995
+         2           1.456
+
+
+
+
+
+
+
+
+
+
