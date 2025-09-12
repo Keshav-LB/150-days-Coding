@@ -1,0 +1,72 @@
+SQL> create table users(
+  2  account number primary key,
+  3  name varchar2(30) unique
+  4  );
+
+Table created.
+
+SQL> create table transactions(
+  2  trans_id number primary key,
+  3  account number,
+  4  amount number,
+  5  transacted_on date
+  6  );
+
+Table created.
+
+SQL> insert into users values(900001, 'Alice');
+SQL> insert into users values(900002, 'Bob');
+SQL> insert into users values(900003, 'Charlie');
+
+
+SQL> select * from users;
+
+   ACCOUNT NAME
+---------- ------------------------------
+    900001 Alice
+    900002 Bob
+    900003 Charlie
+
+
+SQL> insert into transactions values(1, 900001, 7000, date '2020-08-01');
+SQL> insert into transactions values(2, 900001, 7000, to_date('2020-09-01','YYYY-MM-DD'));
+SQL> insert into transactions values(3, 900001, -3000, date '2020-09-02');
+SQL> insert into transactions values(4, 900002, 1000, date '2020-09-12');
+SQL> insert into transactions values(5, 900003, 6000, date '2020-08-07');
+SQL> insert into transactions values(6, 900003, 6000, date '2020-09-07');
+SQL> insert into transactions values(7, 900003, -4000, date '2020-09-11');
+
+SQL> select * from transactions;
+
+  TRANS_ID    ACCOUNT     AMOUNT TRANSACTE
+---------- ---------- ---------- ---------
+         1     900001       7000 01-AUG-20
+         2     900001       7000 01-SEP-20
+         3     900001      -3000 02-SEP-20
+         4     900002       1000 12-SEP-20
+         5     900003       6000 07-AUG-20
+         6     900003       6000 07-SEP-20
+         7     900003      -4000 11-SEP-20
+
+
+SQL> select u.name,
+  2  sum(t.amount) as balance
+  3  from users u
+  4  join transactions t
+  5  on u.account = t.account
+  6  group by u.name
+  7  having sum(t.amount) > 10000;
+
+NAME                              BALANCE
+------------------------------ ----------
+Alice                               11000
+
+
+
+
+
+
+
+
+
+
