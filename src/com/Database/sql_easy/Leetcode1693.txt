@@ -1,0 +1,55 @@
+
+SQL> create table dailySales(
+  2  date_id date,
+  3  make_name varchar2(30),
+  4  lead_id number,
+  5  partner_id number
+  6  );
+
+Table created.
+
+INSERT INTO DailySales VALUES (DATE '2020-12-08', 'toyota', 0, 1);
+INSERT INTO DailySales VALUES (DATE '2020-12-08', 'toyota', 1, 0);
+INSERT INTO DailySales VALUES (DATE '2020-12-08', 'toyota', 1, 2);
+INSERT INTO DailySales VALUES (DATE '2020-12-07', 'toyota', 0, 2);
+INSERT INTO DailySales VALUES (DATE '2020-12-07', 'toyota', 0, 1);
+INSERT INTO DailySales VALUES (DATE '2020-12-08', 'honda', 1, 2);
+INSERT INTO DailySales VALUES (DATE '2020-12-08', 'honda', 2, 1);
+INSERT INTO DailySales VALUES (DATE '2020-12-07', 'honda', 0, 1);
+INSERT INTO DailySales VALUES (DATE '2020-12-07', 'honda', 1, 2);
+INSERT INTO DailySales VALUES (DATE '2020-12-07', 'honda', 2, 1);
+
+COMMIT;
+
+SQL> select * from dailySales;
+
+DATE_ID   MAKE_NAME                         LEAD_ID PARTNER_ID
+--------- ------------------------------ ---------- ----------
+08-DEC-20 toyota                                  0          1
+08-DEC-20 toyota                                  1          0
+08-DEC-20 toyota                                  1          2
+07-DEC-20 toyota                                  0          2
+07-DEC-20 toyota                                  0          1
+08-DEC-20 honda                                   1          2
+08-DEC-20 honda                                   2          1
+07-DEC-20 honda                                   0          1
+07-DEC-20 honda                                   1          2
+07-DEC-20 honda                                   2          1
+
+10 rows selected.
+
+SQL> SELECT
+  2      TO_CHAR(date_id, 'YYYY-MM-DD') AS date_id,
+  3      make_name,
+  4      COUNT(DISTINCT lead_id) AS unique_leads,
+  5      COUNT(DISTINCT partner_id) AS unique_partners
+  6  FROM DailySales
+  7  GROUP BY TO_CHAR(date_id, 'YYYY-MM-DD'), make_name
+  8  ORDER BY date_id, make_name;
+
+DATE_ID    MAKE_NAME                      UNIQUE_LEADS UNIQUE_PARTNERS
+---------- ------------------------------ ------------ ---------------
+2020-12-07 honda                                     3               2
+2020-12-07 toyota                                    1               2
+2020-12-08 honda                                     2               2
+2020-12-08 toyota                                    2               3
