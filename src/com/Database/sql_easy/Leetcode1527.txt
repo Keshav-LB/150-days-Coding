@@ -1,0 +1,33 @@
+SQL> create table patients (
+  2  patient_id number primary key,
+  3  patient_name varchar2(20),
+  4  conditions varchar2(20));
+
+Table created.
+
+SQL> insert into patients values(1, 'Daniel', 'YFEV COUGH');
+SQL> insert into patients(patient_id, patient_name) values(2, 'Alice');
+SQL> insert into patients(patient_id, patient_name, conditions) values(3, 'Bob', 'DIAB100 MYOP');
+SQL> insert into patients(patient_id, patient_name, conditions) values(4, 'George', 'ACNE DIAB100');
+SQL> insert into patients(patient_id, patient_name, conditions) values(5, 'Alain', 'DIAB201');
+
+SQL> select * from patients;
+
+PATIENT_ID PATIENT_NAME         CONDITIONS
+---------- -------------------- --------------------
+         1 Daniel               YFEV COUGH
+         2 Alice
+         3 Bob                  DIAB100 MYOP
+         4 George               ACNE DIAB100
+         5 Alain                DIAB201
+
+SQL> select patient_id, patient_name, conditions from patients
+  2  where conditions like 'DIAB1%'
+  3  or conditions like '% DIAB1%';
+
+PATIENT_ID PATIENT_NAME         CONDITIONS
+---------- -------------------- --------------------
+         3 Bob                  DIAB100 MYOP
+         4 George               ACNE DIAB100
+
+SQL>
