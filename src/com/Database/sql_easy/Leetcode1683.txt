@@ -1,0 +1,33 @@
+SQL> create table tweets(
+  2  tweet_id number,
+  3  content varchar2(200),
+  4  constraint pk_tweets primary key (tweet_id),
+  5  constraint chk_content check(regexp_like(content, '^[A-Za-z0-9! ]*$'))
+  6  );
+
+Table created.
+
+
+INSERT INTO Tweets VALUES (1, 'Let us Code');       -- ✅ Valid
+INSERT INTO Tweets VALUES (2, 'Hello World!');      -- ✅ Valid
+INSERT INTO Tweets VALUES (3, 'Hi @all');           -- ❌ Invalid (@ not allowed)
+INSERT INTO Tweets VALUES (4, 'Check#this');        -- ❌ Invalid (# not allowed)
+
+INSERT INTO Tweets VALUES (3, 'More than fifteen chars are here!');
+
+SQL> SELECT * FROM tweets;
+
+  TWEET_ID CONTENT
+---------- --------------------------------------------------
+         1 Let us Code
+         2 Hello World!
+         3 More than fifteen chars are here!
+
+
+SQL> SELECT tweet_id
+  2  FROM Tweets
+  3  WHERE LENGTH(content) > 15;
+
+  TWEET_ID
+----------
+         3
