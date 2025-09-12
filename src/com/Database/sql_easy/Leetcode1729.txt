@@ -1,0 +1,37 @@
+
+SQL> create table followers(
+  2  user_id number,
+  3  follower_id number,
+  4  constraint pk_followers primary key (user_id, follower_id)
+  5  );
+
+Table created.
+
+insert into followers values(0, 1);
+insert into followers values(1, 0);
+insert into followers values(2, 0);
+insert into followers values(2, 1);
+
+commit;
+
+SQL> select * from followers;
+
+   USER_ID FOLLOWER_ID
+---------- -----------
+         0           1
+         1           0
+         2           0
+         2           1
+
+
+SQL> select user_id,
+  2  count(follower_id) as followers_count
+  3  from followers
+  4  group by user_id
+  5  order by user_id;
+
+   USER_ID FOLLOWERS_COUNT
+---------- ---------------
+         0               1
+         1               1
+         2               2
