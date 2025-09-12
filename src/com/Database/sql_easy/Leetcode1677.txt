@@ -1,0 +1,45 @@
+
+SQL> drop table users cascade constraints;
+
+Table dropped.
+
+SQL> create table users(
+  2  user_id number primary key,
+  3  name varchar2(10)
+  4  );
+
+Table created.
+
+SQL> INSERT INTO Users (user_id, name) VALUES (1, 'aLice');
+SQL> INSERT INTO Users (user_id, name) VALUES (2, 'bOB');
+SQL> insert into users values(593, 'Dalida');
+SQL> insert into users values(944, 'FREIda');
+SQL> insert into users values(222, 'MaRRy aNN');
+
+
+
+SQL> select * from users;
+
+   USER_ID NAME
+---------- ----------
+         1 aLice
+         2 bOB
+       593 Dalida
+       944 FREIda
+       222 MaRRy aNN
+
+
+SQL> select user_id,
+  2  initcap(lower(trim(name))) as name
+  3  from users
+  4  order by user_id;
+
+   USER_ID NAME
+---------- ----------
+         1 Alice
+         2 Bob
+       222 Marry Ann
+       593 Dalida
+       944 Freida
+
+
