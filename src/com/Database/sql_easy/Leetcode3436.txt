@@ -1,0 +1,46 @@
+SQL> create table users(
+  2  user_id number,
+  3  email varchar2(30)
+  4  );
+
+Table created.
+
+SQL> insert into users values(1, 'alice@example.com');
+
+1 row created.
+
+SQL> insert into users values(2, 'bob_at_example.com');
+
+1 row created.
+
+SQL> insert into users values(3, 'charlie@example.net');
+
+1 row created.
+
+SQL> insert into users values(4, 'david@domain.com');
+
+1 row created.
+
+SQL> insert into users values(5, 'eve@invalid');
+
+1 row created.
+
+SQL> select * from users;
+
+   USER_ID EMAIL
+---------- ------------------------------
+         1 alice@example.com
+         2 bob_at_example.com
+         3 charlie@example.net
+         4 david@domain.com
+         5 eve@invalid
+
+SQL> select user_id, email
+  2  from users
+  3  where regexp_like(email, '^[A-Za-z0-9_]+@[A-Za-z]+\.com$')
+  4  order by user_id;
+
+   USER_ID EMAIL
+---------- ------------------------------
+         1 alice@example.com
+         4 david@domain.com
