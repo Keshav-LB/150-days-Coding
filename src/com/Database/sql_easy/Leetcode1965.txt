@@ -1,0 +1,54 @@
+
+SQL> create table employees(
+  2  employee_id number primary key,
+  3  name varchar2(20)
+  4  );
+
+Table created.
+
+SQL> create table salaries(
+  2  employee_id number primary key,
+  3  salary number
+  4  );
+
+Table created.
+
+SQL> insert into employees values (2, 'Crew');
+SQL> insert into employees values (4, 'Haven');
+SQL> insert into employees values (5, 'Kristian');
+
+
+SQL> insert into salaries values(5, 76071);
+SQL> insert into salaries values(1, 22517);
+SQL> insert into salaries values(4, 63539);
+
+SQL> select * from employees;
+
+EMPLOYEE_ID NAME
+----------- --------------------
+          2 Crew
+          4 Haven
+          5 Kristian
+
+
+SQL> select * from salaries;
+
+EMPLOYEE_ID     SALARY
+----------- ----------
+          5      76071
+          1      22517
+          4      63539
+
+
+
+SQL> select coalesce(e.employee_id, s.employee_id) as employee_id
+  2  from employees e
+  3  full outer join salaries s
+  4  on e.employee_id = s.employee_id
+  5  where e.name is null or s.salary is null
+  6  order by employee_id;
+
+EMPLOYEE_ID
+-----------
+          1
+          2
