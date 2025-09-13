@@ -1,0 +1,40 @@
+
+SQL> create table employees(
+  2  emp_id number,
+  3  event_day date,
+  4  in_time number,
+  5  out_time number,
+  6  constraint pk_emp primary key (emp_id, event_day, in_time)
+  7  );
+
+Table created.
+
+SQL> insert into employees values(1, date '2020-11-28', 4, 32);
+SQL> insert into employees values(1, date '2020-11-28', 55, 200);
+SQL> insert into employees values(1, date '2020-12-03', 1, 42);
+SQL> insert into employees values(2, date '2020-11-28', 3, 33);
+SQL> insert into employees values(2, date '2020-12-09', 47, 74);
+
+SQL> select * from employees;
+
+    EMP_ID EVENT_DAY    IN_TIME   OUT_TIME
+---------- --------- ---------- ----------
+         1 28-NOV-20          4         32
+         1 28-NOV-20         55        200
+         1 03-DEC-20          1         42
+         2 28-NOV-20          3         33
+         2 09-DEC-20         47         74
+
+
+SQL> select to_char(event_day) as day,
+  2  emp_id,
+  3  sum(out_time-in_time) as total_time
+  4  from employees
+  5  group by event_day, emp_id;
+
+DAY                    EMP_ID TOTAL_TIME
+------------------ ---------- ----------
+28-NOV-20                   1        173
+03-DEC-20                   1         41
+28-NOV-20                   2         30
+09-DEC-20                   2         27
