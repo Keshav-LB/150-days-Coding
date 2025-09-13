@@ -1,0 +1,42 @@
+
+SQL> create table teacher(
+  2  teacher_id number,
+  3  subject_id number,
+  4  dept_id number,
+  5  constraint pk_teacher primary key (subject_id, dept_id)
+  6  );
+
+Table created.
+
+SQL> insert into teacher values(1, 2, 3);
+SQL> insert into teacher values(1, 2, 4);
+SQL> insert into teacher values(1, 3, 3);
+SQL> insert into teacher values(2, 1, 1);
+SQL> insert into teacher values(2, 2, 1);
+SQL> insert into teacher values(2, 3, 1);
+SQL> insert into teacher values(2, 4, 1);
+
+
+SQL> select * from teacher;
+
+TEACHER_ID SUBJECT_ID    DEPT_ID
+---------- ---------- ----------
+         1          2          3
+         1          2          4
+         1          3          3
+         2          1          1
+         2          2          1
+         2          3          1
+         2          4          1
+
+7 rows selected.
+
+SQL> select teacher_id,
+  2  count(distinct subject_id) as cnt
+  3  from teacher
+  4  group by teacher_id;
+
+TEACHER_ID        CNT
+---------- ----------
+         1          2
+         2          4
