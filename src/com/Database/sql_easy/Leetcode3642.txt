@@ -1,0 +1,108 @@
+CREATE TABLE books (
+    book_id   NUMBER PRIMARY KEY,
+    title     VARCHAR2(100),
+    author    VARCHAR2(100),
+    genre     VARCHAR2(50),
+    pages     NUMBER
+);
+
+CREATE TABLE reading_sessions (
+    session_id     NUMBER PRIMARY KEY,
+    book_id        NUMBER,
+    reader_name    VARCHAR2(100),
+    pages_read     NUMBER,
+    session_rating NUMBER,
+    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+
+
+INSERT INTO books VALUES (1, 'The Great Gatsby', 'F. Scott', 'Fiction', 180);
+INSERT INTO books VALUES (2, 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', 281);
+INSERT INTO books VALUES (3, '1984', 'George Orwell', 'Dystopian', 328);
+INSERT INTO books VALUES (4, 'Pride and Prejudice', 'Jane Austen', 'Romance', 432);
+INSERT INTO books VALUES (5, 'The Catcher in the Rye', 'J.D. Salinger', 'Fiction', 277);
+
+-- The Great Gatsby
+INSERT INTO reading_sessions VALUES (1, 1, 'Alice', 50, 5);
+INSERT INTO reading_sessions VALUES (2, 1, 'Bob', 60, 1);
+INSERT INTO reading_sessions VALUES (3, 1, 'Carol', 40, 4);
+INSERT INTO reading_sessions VALUES (4, 1, 'David', 30, 2);
+INSERT INTO reading_sessions VALUES (5, 1, 'Emma', 45, 5);
+
+-- To Kill a Mockingbird
+INSERT INTO reading_sessions VALUES (6, 2, 'Frank', 80, 4);
+INSERT INTO reading_sessions VALUES (7, 2, 'Grace', 70, 4);
+INSERT INTO reading_sessions VALUES (8, 2, 'Henry', 90, 5);
+INSERT INTO reading_sessions VALUES (9, 2, 'Ivy', 60, 4);
+INSERT INTO reading_sessions VALUES (10, 2, 'Jack', 75, 4);
+
+-- 1984
+INSERT INTO reading_sessions VALUES (11, 3, 'Kate', 100, 2);
+INSERT INTO reading_sessions VALUES (12, 3, 'Liam', 120, 1);
+INSERT INTO reading_sessions VALUES (13, 3, 'Mia', 80, 2);
+INSERT INTO reading_sessions VALUES (14, 3, 'Noah', 90, 1);
+INSERT INTO reading_sessions VALUES (15, 3, 'Olivia', 110, 4);
+INSERT INTO reading_sessions VALUES (16, 3, 'Paul', 95, 5);
+
+-- Pride and Prejudice
+INSERT INTO reading_sessions VALUES (17, 4, 'Quinn', 150, 3);
+INSERT INTO reading_sessions VALUES (18, 4, 'Ruby', 140, 3);
+
+-- The Catcher in the Rye
+INSERT INTO reading_sessions VALUES (19, 5, 'Sam', 80, 1);
+INSERT INTO reading_sessions VALUES (20, 5, 'Tara', 70, 2);
+
+
+
+
+
+SELECT 
+    b.book_id,
+    b.title,
+    b.author,
+    b.genre,
+    b.pages,
+    MAX(r.session_rating) - MIN(r.session_rating) AS rating_spread,
+    ROUND(
+        SUM(CASE WHEN r.session_rating <= 2 OR r.session_rating >= 4 THEN 1 ELSE 0 END) * 1.0 
+        / COUNT(*), 
+        2
+    ) AS polarization_score
+FROM books b
+JOIN reading_sessions r
+    ON b.book_id = r.book_id
+GROUP BY b.book_id, b.title, b.author, b.genre, b.pages
+HAVING 
+    COUNT(*) >= 5
+    AND MAX(r.session_rating) >= 4
+    AND MIN(r.session_rating) <= 2
+    AND (SUM(CASE WHEN r.session_rating <= 2 OR r.session_rating >= 4 THEN 1 ELSE 0 END) * 1.0 / COUNT(*)) >= 0.6
+ORDER BY polarization_score DESC, b.title DESC;
+
+
+s
+
+
+Output:
+
++---------+------------------+---------------+-----------+-------+---------------+--------------------+
+| book_id | title            | author        | genre     | pages | rating_spread | polarization_score |
++---------+------------------+---------------+-----------+-------+---------------+--------------------+
+| 1       | The Great Gatsby | F. Scott      | Fiction   | 180   | 4             | 1.00               |
+| 3       | 1984             | George Orwell | Dystopian | 328   | 4             | 1.00               |
++---------+------------------+---------------+-----------+-------+---------------+--------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
