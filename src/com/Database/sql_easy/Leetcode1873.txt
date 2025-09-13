@@ -1,0 +1,54 @@
+SQL> create table employees(
+  2  employee_id number primary key,
+  3  name varchar2(20),
+  4  salary number);
+
+Table created.
+
+SQL> insert into employees values(2, 'Meir', 3000);
+
+1 row created.
+
+SQL> insert into employees values(3, 'Michael', 3800);
+
+1 row created.
+
+SQL> insert into employees values(7, 'Addilyn', 7400);
+
+1 row created.
+
+SQL> insert into employees values(8, 'Juan', 6100);
+
+1 row created.
+
+SQL> insert into employees values(9, 'Kannon', 7700);
+
+1 row created.
+
+SQL> select * from employees;
+
+EMPLOYEE_ID NAME                     SALARY
+----------- -------------------- ----------
+          2 Meir                       3000
+          3 Michael                    3800
+          7 Addilyn                    7400
+          8 Juan                       6100
+          9 Kannon                     7700
+
+
+SQL> SELECT employee_id,
+  2         CASE
+  3              WHEN MOD(employee_id, 2) = 1 AND name NOT LIKE 'M%'
+  4                   THEN salary
+  5              ELSE 0
+  6         END AS bonus
+  7  FROM employees
+  8  ORDER BY employee_id;
+
+EMPLOYEE_ID      BONUS
+----------- ----------
+          2          0
+          3          0
+          7       7400
+          8          0
+          9       7700
