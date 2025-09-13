@@ -1,0 +1,47 @@
+SQL> create table products(
+  2  product_id number primary key,
+  3  product_name varchar2(20),
+  4  description varchar2(300)
+  5  );
+
+Table created.
+
+INSERT INTO products VALUES (1, 'Widget A', 'This is a sample product with SN1234-5678');
+
+INSERT INTO products VALUES (2, 'Widget B', 'A product with serial SN9876-1234 in the description');
+
+INSERT INTO products VALUES (3, 'Widget C', 'Product SN1234-56789 is available now');
+
+INSERT INTO products VALUES (4, 'Widget D', 'No serial number here');
+
+INSERT INTO products VALUES (5, 'Widget E', 'Check out SN4321-8765 in this description');
+
+
+products table:
+
++------------+--------------+------------------------------------------------------+
+| product_id | product_name | description                                          |
++------------+--------------+------------------------------------------------------+
+| 1          | Widget A     | This is a sample product with SN1234-5678            |
+| 2          | Widget B     | A product with serial SN9876-1234 in the description |
+| 3          | Widget C     | Product SN1234-56789 is available now                |
+| 4          | Widget D     | No serial number here                                |
+| 5          | Widget E     | Check out SN4321-8765 in this description            |
++------------+--------------+------------------------------------------------------+
+
+
+
+SQL> select * from products
+  2  where regexp_like(description, 'SN[0-9]{4}-[0-9]{4}')
+  3  order by product_id;
+
+Output:
+
++------------+--------------+------------------------------------------------------+
+| product_id | product_name | description                                          |
++------------+--------------+------------------------------------------------------+
+| 1          | Widget A     | This is a sample product with SN1234-5678            |
+| 2          | Widget B     | A product with serial SN9876-1234 in the description |
+| 5          | Widget E     | Check out SN4321-8765 in this description            |
++------------+--------------+------------------------------------------------------+
+    
