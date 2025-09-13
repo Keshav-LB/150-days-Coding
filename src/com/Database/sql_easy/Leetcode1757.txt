@@ -1,0 +1,50 @@
+SQL> drop table products cascade constraints;
+
+Table dropped.
+
+SQL> create table products(
+  2  product_id number primary key,
+  3  low_fats varchar2(2) check (low_fats in ('Y','N')),
+  4  recyclable varchar2(2) check (recyclable in ('Y','N'))
+  5  );
+
+Table created.
+
+SQL> insert into products values (0, 'Y', 'N');
+
+1 row created.
+
+SQL> insert into products values (1, 'Y', 'Y');
+
+1 row created.
+
+SQL> insert into products values (2, 'N', 'Y');
+
+1 row created.
+
+SQL> insert into products values (3, 'Y', 'Y');
+
+1 row created.
+
+SQL> insert into products values (4, 'N', 'N');
+
+1 row created.
+
+SQL> select * from products;
+
+PRODUCT_ID LOW_FATS   RECYCLABLE
+---------- ---------- ------------
+         0 Y          N
+         1 Y          Y
+         2 N          Y
+         3 Y          Y
+         4 N          N
+
+SQL> select product_id
+  2  from products where low_fats = 'Y' and recyclable = 'Y';
+
+PRODUCT_ID
+----------
+         1
+         3
+
