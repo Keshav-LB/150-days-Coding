@@ -1,0 +1,47 @@
+SQL> create table products(
+  2  product_id number primary key,
+  3  store1 number,
+  4  store2 number,
+  5  store3 number);
+
+Table created.
+
+SQL> insert into products values (0, 95, 100, 105);
+
+1 row created.
+
+SQL> insert into products values (1, 70, null, 80);
+
+1 row created.
+
+SQL> select * from products;
+
+PRODUCT_ID     STORE1     STORE2     STORE3
+---------- ---------- ---------- ----------
+         0         95        100        105
+         1         70                    80
+
+
+
+SQL> SELECT product_id, 'store1' AS store, store1 AS price
+  2  FROM Products
+  3  WHERE store1 IS NOT NULL
+  4  UNION ALL
+  5  SELECT product_id, 'store2' AS store, store2 AS price
+  6  FROM Products
+  7  WHERE store2 IS NOT NULL
+  8  UNION ALL
+  9  SELECT product_id, 'store3' AS store, store3 AS price
+ 10  FROM Products
+ 11  WHERE store3 IS NOT NULL
+ 12  order by product_id;
+
+PRODUCT_ID STORE       PRICE
+---------- ------ ----------
+         0 store1         95
+         0 store2        100
+         0 store3        105
+         1 store3         80
+         1 store1         70
+
+SQL>
