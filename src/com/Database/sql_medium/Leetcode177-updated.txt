@@ -1,0 +1,61 @@
+SQL> drop table employee cascade constraint;
+
+Table dropped.
+
+SQL> create table employee(
+  2  id number,
+  3  salary number,
+  4  constraint pk_emp primary key (id));
+
+Table created.
+
+SQL> insert into employee values(1, 100);
+
+1 row created.
+
+SQL> insert into employee values(2, 200);
+
+1 row created.
+
+SQL> insert into employee values(3, 300);
+
+1 row created.
+
+
+SQL> select * from employee;
+
+        ID     SALARY
+---------- ----------
+         1        100
+         2        200
+         3        300   
+
+
+
+
+create function getNthSalary(n in number) return number is result number;
+begin
+select salary into result from (
+	select salary, dense_rank() over (order by salary desc)as rank
+	from employee
+)
+where rank = n;
+
+return result;
+end;
+/
+
+SQL> select getNthSalary(2) from dual;
+
+GETNTHSALARY(2)
+---------------
+            200
+
+Query to see the list of functions present in database
+----------------------------------------------------------
+	select object_name from user_objects where object_type='FUNCTION';
+
+
+Query to drop a function
+--------------------------
+	Drop function getNthSalary
