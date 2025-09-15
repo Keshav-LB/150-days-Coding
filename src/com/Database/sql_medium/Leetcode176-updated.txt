@@ -1,0 +1,40 @@
+SQL> drop table employee cascade constraint;
+
+Table dropped.
+
+SQL> create table employee(
+  2  id number,
+  3  salary number,
+  4  constraint pk_emp primary key (id));
+
+Table created.
+
+SQL> insert into employee values(1, 100);
+
+1 row created.
+
+SQL> insert into employee values(2, 200);
+
+1 row created.
+
+SQL> insert into employee values(3, 300);
+
+1 row created.
+
+SQL> select * from employee;
+
+        ID     SALARY
+---------- ----------
+         1        100
+         2        200
+         3        300
+
+SQL> select
+  2  max(salary) as secondHighestSalary
+  3  from employee
+  4  where
+  5  salary < (select max(salary) from employee);
+
+SECONDHIGHESTSALARY
+-------------------
+                200
