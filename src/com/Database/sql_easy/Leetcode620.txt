@@ -1,33 +1,27 @@
-SQL> create table cinema(
-  2  id number primary key,
-  3  movie varchar2(25),
-  4  description varchar2(25),
-  5  rating number
-  6  );
+=================================================================================================================
+Write a solution to report the movies with an odd-numbered ID and a description that is not "boring".
+Return the result table ordered by rating in descending order.
+=================================================================================================================
 
-Table created.
+drop table cinema cascade constraint;
 
-SQL> insert into cinema values(1, 'War', 'great 3D', 8.9);
+create table cinema(
+id number primary key,
+movie varchar2(25),
+description varchar2(25),
+rating number
+);
 
-1 row created.
 
-SQL> insert into cinema values(2, 'Science', 'fiction', 8.5);
+insert into cinema values(1, 'War', 'great 3D', 8.9);
+insert into cinema values(2, 'Science', 'fiction', 8.5);
+insert into cinema values(3, 'irish', 'boring', 6.2);
+insert into cinema values(4, 'Ice song', 'Fantacy', 8.6);
+insert into cinema values(5, 'House card', 'Interesting', 9.1);
 
-1 row created.
-
-SQL> insert into cinema values(3, 'irish', 'boring', 6.2);
-
-1 row created.
-
-SQL> insert into cinema values(4, 'Ice song', 'Fantacy', 8.6);
-
-1 row created.
-
-SQL> insert into cinema values(5, 'House card', 'Interesting', 9.1);
-
-1 row created.
 
 SQL> select * from cinema;
+
 
      ID MOVIE                     DESCRIPTION                   RATING
 ------- ------------------------- ------------------------- ----------
@@ -38,14 +32,14 @@ SQL> select * from cinema;
       5 House card                Interesting                      9.1
 
 
-SQL> select
-  2  id,
-  3  movie,
-  4  description,
-  5  rating
-  6  from cinema
-  7  where mod(id,2)=1 and description <> 'boring'
-  8  order by rating desc;
+select
+id,
+movie,
+description,
+rating
+from cinema
+where mod(id,2)=1 and description <> 'boring'
+order by rating desc;
 
      ID MOVIE                     DESCRIPTION                   RATING
 ------- ------------------------- ------------------------- ----------
