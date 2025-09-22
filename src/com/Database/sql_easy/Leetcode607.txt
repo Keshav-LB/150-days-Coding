@@ -1,32 +1,37 @@
-SQL> create table salesPerson(
-  2  sales_id number primary key,
-  3  name varchar2(20),
-  4  salary number,
-  5  commission_rate number,
-  6  hire_date date
-  7  );
+=================================================================================================================
+Write a solution to find the names of all the salespersons who did not have any orders related to the company
+with the name "RED".
+=================================================================================================================
 
-Table created.
+drop table salesPerson cascade constraint;
 
-SQL> create table company(
-  2  com_id number primary key,
-  3  name varchar2(20),
-  4  city varchar2(20)
-  5  );
+create table salesPerson(
+sales_id number primary key,
+name varchar2(20),
+salary number,
+commission_rate number,
+hire_date date
+);
 
-Table created.
+drop table company cascade constraint;
 
-SQL> create table orders(
-  2  order_id number primary key,
-  3  order_date date,
-  4  com_id number,
-  5  sales_id number,
-  6  amount number,
-  7  constraint fk_comId foreign key(com_id) references company(com_id),
-  8  constraint fk_salesId foreign key(sales_id) references salesPerson(sales_id)
-  9  );
+create table company(
+com_id number primary key,
+name varchar2(20),
+city varchar2(20)
+);
 
-Table created.
+drop table orders cascade constraint;
+
+create table orders(
+order_id number primary key,
+order_date date,
+com_id number,
+sales_id number,
+amount number,
+constraint fk_comId foreign key(com_id) references company(com_id),
+constraint fk_salesId foreign key(sales_id) references salesPerson(sales_id)
+);
 
 
 -- Insert into SalesPerson
@@ -79,14 +84,14 @@ SQL> select * from orders;
          4 01-APR-14          1          4      25000
 
 
-SQL> select s.name
-  2  from salesPerson s
-  3  where s.sales_Id not in (
-  4  select o.sales_Id
-  5  from orders o
-  6  join company c
-  7  on o.com_id = c.com_id
-  8  where c.name = 'RED');
+select s.name
+from salesPerson s
+where s.sales_Id not in (
+select o.sales_Id
+from orders o
+join company c
+on o.com_id = c.com_id
+where c.name = 'RED');
 
 NAME
 ---------------
