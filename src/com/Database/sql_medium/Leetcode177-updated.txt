@@ -1,26 +1,19 @@
-SQL> drop table employee cascade constraint;
+=============================================================================================================
+Write a solution to find the nth highest distinct salary from the Employee table. If there are less than n 
+distinct salaries, return null.
+=============================================================================================================
 
-Table dropped.
+drop table employee cascade constraint;
 
-SQL> create table employee(
-  2  id number,
-  3  salary number,
-  4  constraint pk_emp primary key (id));
+create table employee(
+id number,
+salary number,
+constraint pk_emp primary key (id)
+);
 
-Table created.
-
-SQL> insert into employee values(1, 100);
-
-1 row created.
-
-SQL> insert into employee values(2, 200);
-
-1 row created.
-
-SQL> insert into employee values(3, 300);
-
-1 row created.
-
+insert into employee values(1, 100);
+insert into employee values(2, 200);
+insert into employee values(3, 300);
 
 SQL> select * from employee;
 
@@ -31,7 +24,7 @@ SQL> select * from employee;
          3        300   
 
 
-
+drop function getNthSalary;
 
 create function getNthSalary(n in number) return number is result number;
 begin
@@ -40,7 +33,9 @@ select salary into result from (
 	from employee
 )
 where rank = n;
-
+exception
+when no_data_found then
+return null;
 return result;
 end;
 /
