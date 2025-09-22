@@ -1,3 +1,11 @@
+=============================================================================================================
+Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:
+	1.The scores should be ranked from the highest to the lowest.
+	2.If there is a tie between two scores, both should have the same ranking.
+	3.After a tie, the next ranking number should be the next consecutive integer value. In other words, there 		should be no holes between ranks.
+Return the result table ordered by score in descending order.
+=============================================================================================================
+
 drop table scores cascade constraints;
 
 create table scores(
@@ -25,13 +33,22 @@ SQL> select * from scores;
          5          4
          6       3.65
 
-6 rows selected.
-
+----------------------------------X-----------------------------------
 select score,
 	dense_rank() over (order by score desc) as rank
 from scores
 order by score desc;
+----------------------------------X-----------------------------------
 
+select s1.score,
+	(
+		select count(distinct s2.score)
+		from scores s2
+		where s2.score > s1.score
+	)+1 as rank
+from scores s1
+order by s1.score desc;
+----------------------------------X-----------------------------------
 
      SCORE       RANK
 ---------- ----------
@@ -42,4 +59,4 @@ order by score desc;
       3.65          3
        3.5          4
 
-6 rows selected.
+
