@@ -1,26 +1,20 @@
-SQL> create table weather ( id number primary key,
-  2  recordDate date not null,
-  3  temperature number);
+============================================================================================================
+Write a solution to find all dates' id with higher temperatures compared to its previous dates (yesterday).
+Return the result table in any order.
+============================================================================================================
+
+
+create table weather ( id number primary key,
+recordDate date not null,
+temperature number);
 
 Table created.
 
-SQL> insert into weather(id, recordDate, temperature) values (1, to_date('2015-01-01', 'YYYY-MM-DD'), 10);
+insert into weather(id, recordDate, temperature) values (1, to_date('2015-01-01', 'YYYY-MM-DD'), 10);
+INSERT INTO Weather VALUES (2, TO_DATE('2015-01-02', 'YYYY-MM-DD'), 25);
+INSERT INTO Weather VALUES (3, TO_DATE('2015-01-03', 'YYYY-MM-DD'), 20);
+INSERT INTO Weather VALUES (4, TO_DATE('2015-01-04', 'YYYY-MM-DD'), 30);
 
-1 row created.
-
-SQL> INSERT INTO Weather VALUES (2, TO_DATE('2015-01-02', 'YYYY-MM-DD'), 25);
-
-1 row created.
-
-SQL> INSERT INTO Weather VALUES (3, TO_DATE('2015-01-03', 'YYYY-MM-DD'), 20);
-
-1 row created.
-
-SQL> INSERT INTO Weather VALUES (4, TO_DATE('2015-01-04', 'YYYY-MM-DD'), 30);
-
-1 row created.
-
-SQL>
 SQL> COMMIT;
 
 Commit complete.
@@ -37,7 +31,7 @@ SQL> select * from weather;
 SQL> select w1.id
   2  from weather w1
   3  join weather w2
-  4  on w1.recordDate = w2.recordDate+1
+  4  on w1.recordDate - w2.recordDate = 1
   5  where w1.temperature > w2.temperature;
 
      ID
