@@ -22,9 +22,6 @@ departmentId number,
 constraint fk_dept foreign key (departmentId) references department(id)
 );
 
-
-
-
 insert into department values (1, 'IT');
 insert into department values (2, 'Sales');
 
