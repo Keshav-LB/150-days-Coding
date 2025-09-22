@@ -1,21 +1,17 @@
-SQL> create table product(
-  2  product_id number primary key,
-  3  product_name varchar2(25) not null
-  4  );
+============================================================================================================
+Write a solution to report the product_name, year, and price for each sale_id in the Sales table.
+============================================================================================================
 
-Table created.
+drop table product cascade constraint;
 
-SQL> insert into product values(100, 'Nokia');
+create table product(
+product_id number primary key,
+product_name varchar2(25) not null
+);
 
-1 row created.
-
-SQL> insert into product values(200, 'Apple');
-
-1 row created.
-
-SQL> insert into product values(300, 'Samsung');
-
-1 row created.
+insert into product values(100, 'Nokia');
+insert into product values(200, 'Apple');
+insert into product values(300, 'Samsung');
 
 SQL> select * from product;
 
@@ -26,29 +22,21 @@ PRODUCT_ID PRODUCT_NAME
        300 Samsung
 
 
-SQL> create table sales(
-  2  sale_id number,
-  3  product_id number,
-  4  year number,
-  5  quantity number,
-  6  price number,
-  7  primary key(sale_id, year),
-  8  constraint fk_prodId foreign key(product_id) references product(product_id)
-  9  );
+drop table sales cascade constraint;
 
-Table created.
+create table sales(
+sale_id number,
+product_id number,
+year number,
+quantity number,
+price number,
+primary key(sale_id, year),
+constraint fk_prodId foreign key(product_id) references product(product_id)
+);
 
-SQL> insert into sales values(1, 100, 2008, 10, 5000);
-
-1 row created.
-
-SQL> insert into sales values(2, 100, 2009, 12, 5000);
-
-1 row created.
-
-SQL> insert into sales values(3, 200, 2011, 15, 9000);
-
-1 row created.
+insert into sales values(1, 100, 2008, 10, 5000);
+insert into sales values(2, 100, 2009, 12, 5000);
+insert into sales values(3, 200, 2011, 15, 9000);
 
 SQL> select * from sales;
 
@@ -59,13 +47,13 @@ SQL> select * from sales;
          3        200       2011         15       9000
 
 
-SQL> select
-  2  p.product_name,
-  3  s.year,
-  4  s.price
-  5  from product p
-  6  join sales s
-  7  on p.product_id = s.product_id;
+select
+p.product_name,
+s.year,
+s.price
+from product p
+join sales s
+on p.product_id = s.product_id;
 
 PRODUCT_NAME                    YEAR      PRICE
 ------------------------- ---------- ----------
@@ -73,4 +61,4 @@ Nokia                           2008       5000
 Nokia                           2009       5000
 Apple                           2011       9000
 
-SQL>
+
