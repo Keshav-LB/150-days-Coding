@@ -1,27 +1,21 @@
-SQL> create table employee(
-  2  empId number primary key,
-  3  name varchar2(20) not null,
-  4  supervisor number,
-  5  salary number
-  6  );
+===================================================================================================
+Write a solution to report the name and bonus amount of each employee with a bonus less than 1000.
+===================================================================================================
 
-Table created.
+drop table employee cascade constraint;
 
-SQL> insert into employee values(3, 'Brad', null, 4000);
+create table employee(
+empId number primary key,
+name varchar2(20) not null,
+supervisor number,
+salary number
+);
 
-1 row created.
 
-SQL> insert into employee values(1, 'John', 3, 1000);
-
-1 row created.
-
-SQL> insert into employee values(2, 'Dan', 3, 2000);
-
-1 row created.
-
-SQL> insert into employee values(4, 'Thomas', 3, 4000);
-
-1 row created.
+insert into employee values(3, 'Brad', null, 4000);
+insert into employee values(1, 'John', 3, 1000);
+insert into employee values(2, 'Dan', 3, 2000);
+insert into employee values(4, 'Thomas', 3, 4000);
 
 SQL> select * from employee;
 
@@ -32,21 +26,17 @@ SQL> select * from employee;
          2 Dan                           3       2000
          4 Thomas                        3       4000
 
-SQL> create table bonus(
-  2  empId number primary key,
-  3  bonus number,
-  4  constraint fk_empId foreign key (empId) references employee(empId)
-  5  );
+drop table bonus cascade constraint;
 
-Table created.
+create table bonus(
+empId number primary key,
+bonus number,
+constraint fk_empId foreign key (empId) references employee(empId)
+);
 
-SQL> insert into bonus values(2, 500);
 
-1 row created.
-
-SQL> insert into bonus values(4, 2000);
-
-1 row created.
+insert into bonus values(2, 500);
+insert into bonus values(4, 2000);
 
 SQL> select * from bonus;
 
@@ -54,6 +44,7 @@ SQL> select * from bonus;
 ---------- ----------
          2        500
          4       2000
+
 
 SQL> select e.name,
   2  b.bonus
@@ -68,4 +59,4 @@ Brad
 John
 Dan                         500
 
-SQL>
+
