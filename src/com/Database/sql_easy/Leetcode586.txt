@@ -1,25 +1,20 @@
+==================================================================================================================
+Write a solution to find the customer_number for the customer who has placed the largest number of orders.
+The test cases are generated so that exactly one customer will have placed more orders than any other customer.
+==================================================================================================================
 
-SQL> create table orders(
-  2  order_number number primary key,
-  3  customer_number number not null);
+drop table orders cascade constraint;
 
-Table created.
+create table orders(
+order_number number primary key,
+customer_number number not null);
 
-SQL> insert into orders values(1, 1);
 
-1 row created.
+insert into orders values(1, 1);
+insert into orders values(2, 2);
+insert into orders values(3, 3);
+insert into orders values(4, 3);
 
-SQL> insert into orders values(2, 2);
-
-1 row created.
-
-SQL> insert into orders values(3, 3);
-
-1 row created.
-
-SQL> insert into orders values(4, 3);
-
-1 row created.
 
 SQL> select * from orders;
 
