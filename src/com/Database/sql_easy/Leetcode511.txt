@@ -1,33 +1,23 @@
+========================================================================
+Write a solution to find the first login date for each player.
+========================================================================
 
-SQL> create table activity(
-  2  player_id number,
-  3  device_id number not null,
-  4  event_date date,
-  5  games_played number,
-  6  constraint pk_activity primary key(player_id, event_date)
-  7  );
 
-Table created.
+create table activity(
+player_id number,
+device_id number not null,
+event_date date,
+games_played number,
+constraint pk_activity primary key(player_id, event_date)
+);
 
-SQL> insert into activity values(1, 2, to_date('2016-03-01','YYYY-MM-DD'), 5);
 
-1 row created.
+insert into activity values(1, 2, to_date('2016-03-01','YYYY-MM-DD'), 5);
+insert into activity values(1, 2, to_date('2016-05-02','YYYY-MM-DD'), 6);
+insert into activity values(2, 3, to_date('2017-06-25','YYYY-MM-DD'), 1);
+insert into activity values(3, 1, to_date('2016-03-02','YYYY-MM-DD'), 0);
+insert into activity values(3, 4, to_date('2018-07-03','YYYY-MM-DD'), 5);
 
-SQL> insert into activity values(1, 2, to_date('2016-05-02','YYYY-MM-DD'), 6);
-
-1 row created.
-
-SQL> insert into activity values(2, 3, to_date('2017-06-25','YYYY-MM-DD'), 1);
-
-1 row created.
-
-SQL> insert into activity values(3, 1, to_date('2016-03-02','YYYY-MM-DD'), 0);
-
-1 row created.
-
-SQL> insert into activity values(3, 4, to_date('2018-07-03','YYYY-MM-DD'), 5);
-
-1 row created.
 
 SQL> select * from activity;
 
@@ -45,10 +35,11 @@ SQL> select
   4  from activity
   5  group by player_id;
 
+
  PLAYER_ID FIRST_LOGI
 ---------- ----------
          1 2016-03-01
          2 2017-06-25
          3 2016-03-02
 
-SQL>
+
