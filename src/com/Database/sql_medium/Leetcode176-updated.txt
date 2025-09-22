@@ -1,25 +1,20 @@
-SQL> drop table employee cascade constraint;
+=============================================================================================================
+Write a solution to find the second highest distinct salary from the Employee table. If there is no second highest salary, return null.
+=============================================================================================================
 
-Table dropped.
+drop table employee cascade constraint;
 
-SQL> create table employee(
-  2  id number,
-  3  salary number,
-  4  constraint pk_emp primary key (id));
+create table employee(
+id number,
+salary number,
+constraint pk_emp primary key (id)
+);
 
-Table created.
 
-SQL> insert into employee values(1, 100);
+insert into employee values(1, 100);
+insert into employee values(2, 200);
+insert into employee values(3, 300);
 
-1 row created.
-
-SQL> insert into employee values(2, 200);
-
-1 row created.
-
-SQL> insert into employee values(3, 300);
-
-1 row created.
 
 SQL> select * from employee;
 
@@ -29,11 +24,11 @@ SQL> select * from employee;
          2        200
          3        300
 
-SQL> select
-  2  max(salary) as secondHighestSalary
-  3  from employee
-  4  where
-  5  salary < (select max(salary) from employee);
+select
+max(salary) as secondHighestSalary
+from employee
+where
+salary < (select max(salary) from employee);
 
 SECONDHIGHESTSALARY
 -------------------
