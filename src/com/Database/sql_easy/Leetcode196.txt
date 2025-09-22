@@ -2,17 +2,10 @@ SQL> create table person(id number primary key, email varchar2(25) not null);
 
 Table created.
 
-SQL> insert into person values(1, 'john@example.com');
+insert into person values(1, 'john@example.com');
+insert into person values(2, 'bob@example.com');
+insert into person values(3, 'john@example.com');
 
-1 row created.
-
-SQL> insert into person values(2, 'bob@example.com');
-
-1 row created.
-
-SQL> insert into person values(3, 'john@example.com');
-
-1 row created.
 
 SQL> select * from person;
 
