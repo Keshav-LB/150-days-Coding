@@ -1,37 +1,21 @@
-SQL> create table actorDirector(
-  2  actor_id number,
-  3  director_id number,
-  4  timestamp number primary key);
+================================================================================================================
+Write a solution to find all the pairs (actor_id, director_id) where the actor has cooperated with the director at least three times.
+================================================================================================================
 
-Table created.
+drop table actorDirector cascade constraint;
 
-SQL> insert into actorDirector values(1, 1, 0);
+create table actorDirector(
+actor_id number,
+director_id number,
+timestamp number primary key);
 
-1 row created.
-
-SQL> insert into actorDirector values(1, 1, 1);
-
-1 row created.
-
-SQL> insert into actorDirector values(1, 1, 2);
-
-1 row created.
-
-SQL> insert into actorDirector values(1, 2, 3);
-
-1 row created.
-
-SQL> insert into actorDirector values(1, 2, 4);
-
-1 row created.
-
-SQL> insert into actorDirector values(2, 1, 5);
-
-1 row created.
-
-SQL> insert into actorDirector values(2, 1, 6);
-
-1 row created.
+insert into actorDirector values(1, 1, 0);
+insert into actorDirector values(1, 1, 1);
+insert into actorDirector values(1, 1, 2);
+insert into actorDirector values(1, 2, 3);
+insert into actorDirector values(1, 2, 4);
+insert into actorDirector values(2, 1, 5);
+insert into actorDirector values(2, 1, 6);
 
 SQL> select * from actorDirector;
 
