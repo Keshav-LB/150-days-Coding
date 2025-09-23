@@ -1,0 +1,107 @@
+===============================================================================================================
+Write a solution to find for each user, the join date and the number of orders they made as a buyer in 2019.
+===============================================================================================================
+
+drop table users cascade constraint;
+
+create table users(
+user_id number primary key,
+join_date date,
+favorite_brand varchar2(30)
+);
+
+drop table orders cascade constraint;
+
+create table orders(
+order_id number primary key,
+order_date date,
+item_id number,
+buyer_id number,
+seller_id number,
+foreign key(item_id) references items(item_id),
+foreign key(buyer_id) references users(user_id),
+foreign key(seller_id) references users(user_id)
+);
+
+drop table items cascade constraint;
+
+create table items(
+item_id number primary key,
+item_brand varchar2(30)
+);
+
+--users table
+insert into users values(1, date'2018-01-01', 'Lenovo');
+insert into users values(2, date'2018-02-09', 'Samsung');
+insert into users values(3, date'2018-01-19', 'LG');
+insert into users values(4, date'2018-05-21', 'HP');
+commit;
+
+--orders table
+insert into orders values(1, date'2019-08-01', 4, 1, 2);
+insert into orders values(2, date'2018-08-02', 2, 1, 3);
+insert into orders values(3, date'2019-08-03', 3, 2, 3);
+insert into orders values(4, date'2018-08-04', 1, 4, 2);
+insert into orders values(5, date'2018-08-04', 1, 3, 4);
+insert into orders values(6, date'2019-08-05', 2, 2, 4);
+commit;
+
+--items table
+insert into items values(1, 'Samsung');
+insert into items values(2, 'Lenovo');
+insert into items values(3, 'LG');
+insert into items values(4, 'HP');
+commit;
+
+select * from users;
+
+   USER_ID JOIN_DATE FAVORITE_BRAND
+---------- --------- ------------------------------
+         1 01-JAN-18 Lenovo
+         2 09-FEB-18 Samsung
+         3 19-JAN-18 LG
+         4 21-MAY-18 HP
+
+select * from orders;
+
+  ORDER_ID ORDER_DAT    ITEM_ID   BUYER_ID  SELLER_ID
+---------- --------- ---------- ---------- ----------
+         1 01-AUG-19          4          1          2
+         2 02-AUG-18          2          1          3
+         3 03-AUG-19          3          2          3
+         4 04-AUG-18          1          4          2
+         5 04-AUG-18          1          3          4
+         6 05-AUG-19          2          2          4
+
+
+
+select * from items;
+
+   ITEM_ID ITEM_BRAND
+
+---------- ------------------------------
+         1 Samsung
+         2 Lenovo
+         3 LG
+         4 HP
+
+
+SELECT 
+    u.user_id AS buyer_id,
+    u.join_date,
+    COALESCE(COUNT(o.order_id), 0) AS orders_in_2019
+FROM Users u
+LEFT JOIN Orders o
+    ON u.user_id = o.buyer_id
+   AND EXTRACT(YEAR FROM o.order_date) = 2019
+GROUP BY u.user_id, u.join_date;
+
+
+  BUYER_ID JOIN_DATE ORDERS_IN_2019
+---------- --------- --------------
+         1 01-JAN-18              1
+         2 09-FEB-18              2
+         4 21-MAY-18              0
+         3 19-JAN-18              0
+
+
