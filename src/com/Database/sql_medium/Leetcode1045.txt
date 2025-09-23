@@ -1,0 +1,68 @@
+================================================================================================================
+Write a solution to report the customer ids from the Customer table that bought all the products in the Product table.
+================================================================================================================
+
+drop table product cascade constraint;
+
+create table product(
+product_key number primary key
+);
+
+insert into product values(5);
+insert into product values(6);
+
+commit;
+
+drop table customer cascade constraint;
+
+create table customer(
+customer_id number not null,
+product_key number,
+constraint fk_cust foreign key (product_key) references product (product_key)
+);
+
+insert into customer values (1, 5);
+insert into customer values (2, 6);
+insert into customer values (3, 5);
+insert into customer values (3, 6);
+insert into customer values (1, 6);
+
+commit;
+
+SQL> select * from customer;
+
+CUSTOMER_ID PRODUCT_KEY
+----------- -----------
+          1           5
+          2           6
+          3           5
+          3           6
+          1           6
+
+SQL> select * from product;
+
+PRODUCT_KEY
+-----------
+          5
+          6
+
+select c.customer_id
+from customer c
+group by c.customer_id
+having count(distinct c.product_key) = (select count(product_key) from product);
+
+CUSTOMER_ID
+-----------
+          1
+          3
+
+
+
+
+
+
+
+
+
+
+
