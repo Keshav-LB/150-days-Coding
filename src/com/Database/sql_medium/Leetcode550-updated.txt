@@ -36,6 +36,36 @@ SQL> select * from activity;
 
 
 
+
+
+select a.player_id,
+	a.event_date as first_login,
+	b.event_date as second_login
+from activity a
+join activity b
+  on a.player_Id = b.player_Id
+  and b.event_date = a.event_date+1
+order by player_id, a.event_date;
+
+
+
+ PLAYER_ID FIRST_LOGIN SECOND_LOGIN
+---------- ----------- ------------
+         1   01-MAR-16    02-MAR-16
+
+------------------------------------------------------X---------------------------------------
+
+select count(distinct a.player_id) as player_count
+from activity a
+join activity b
+on a.player_id = b.player_id
+and b.event_date = a.event_date+1;
+
+
+select count(distinct player_id) as total_count from activity;
+
+------------------------------------------------------X---------------------------------------
+
 select
 	round(num_player * 1.0 / total_players, 2) as fractions
 from
@@ -56,12 +86,10 @@ from
 
 
 
-
  FRACTIONS
 ----------
        .33
 
-SQL>
 
 
 
