@@ -1,0 +1,47 @@
+================================================================================================================
+Write a solution to swap the seat id of every two consecutive students. If the number of students is odd, the id of the last student is not swapped.
+
+Return the result table ordered by id in ascending order.
+================================================================================================================
+
+drop table seat cascade constraint;
+
+create table seat(
+id number generated always as identity primary key,
+student varchar2(20)
+);
+
+insert into seat(student) values('Abbot');
+insert into seat(student) values('Doris');
+insert into seat(student) values('Emerson');
+insert into seat(student) values('Green');
+insert into seat(student) values('Jeames');
+
+commit;
+
+SQL> select * from seat;
+
+        ID STUDENT
+---------- --------------------
+         1 Abbot
+         2 Doris
+         3 Emerson
+         4 Green
+         5 Jeames
+
+SELECT 
+    s1.id,
+    COALESCE(s2.student, s1.student) AS student
+FROM Seat s1
+LEFT JOIN Seat s2
+    ON (MOD(s1.id, 2) = 1 AND s2.id = s1.id + 1)
+    OR (MOD(s1.id, 2) = 0 AND s2.id = s1.id - 1)
+ORDER BY s1.id;
+
+        ID STUDENT
+---------- --------------------
+         1 Doris
+         2 Abbot
+         3 Green
+         4 Emerson
+         5 Jeames
