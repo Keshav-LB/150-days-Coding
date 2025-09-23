@@ -1,0 +1,61 @@
+===============================================================================================================
+Write a solution to find the people who have the most friends and the most friends number.
+
+The test cases are generated so that only one person has the most friends.
+===============================================================================================================
+
+drop table requestAccepted cascade constraint;
+
+create table requestAccepted(
+requester_id number,
+accepter_id number,
+accept_date date,
+constraint pk_reqAccepted primary key (requester_id, accepter_id)
+);
+
+insert into requestAccepted values (1, 2, date'2016-06-03');
+insert into requestAccepted values (1, 3, date'2016-06-08');
+insert into requestAccepted values (2, 3, date'2016-06-08');
+insert into requestAccepted values (3, 4, date'2016-06-09');
+
+commit;
+
+select * from requestAccepted;
+
+REQUESTER_ID ACCEPTER_ID ACCEPT_DATE
+------------ ----------- -----------
+           1           2 03-JUN-16
+           1           3 08-JUN-16
+           2           3 08-JUN-16
+           3           4 09-JUN-16
+-------------------------------------------------------------------
+
+select requester_id as id from requestAccepted
+union all
+select accepter_id as id from requestAccepted;
+
+        ID
+----------
+         1
+         1
+         2
+         3
+         2
+         3
+         3
+         4
+-------------------------------------------------------------------
+
+select id, count(*) as num
+from (
+select requester_id as id from requestAccepted
+union all
+select accepter_id as id from requestAccepted
+) t
+group by id
+order by num desc
+fetch first 1 rows only;
+
+        ID        NUM
+---------- ----------
+         3          3
