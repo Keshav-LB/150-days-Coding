@@ -1,0 +1,54 @@
+================================================================================================================
+Initially, all products have price 10.
+Write a solution to find the prices of all products on the date 2019-08-16.
+Return the result table in any order.
+================================================================================================================
+
+drop table products cascade constraint;
+
+create table products(
+product_id number,
+new_price number,
+change_date date,
+primary key (product_id, change_date)
+);
+
+insert into products values(1, 20, date'2019-08-14');
+insert into products values(2, 50, date'2019-08-14');
+insert into products values(1, 30, date'2019-08-15');
+insert into products values(1, 35, date'2019-08-16');
+insert into products values(2, 65, date'2019-08-17');
+insert into products values(3, 20, date'2019-08-18');
+
+commit;
+
+SQL> select * from products;
+
+PRODUCT_ID  NEW_PRICE 	CHANGE_DATE
+---------- ---------- 	-----------
+         1         20	 14-AUG-19
+         2         50	 14-AUG-19
+         1         30	 15-AUG-19
+         1         35	 16-AUG-19
+         2         65	 17-AUG-19
+         3         20	 18-AUG-19
+
+
+SELECT p.product_id,
+       COALESCE((
+           SELECT pr.new_price
+           FROM Products pr
+           WHERE pr.product_id = p.product_id
+             AND pr.change_date <= date'2019-08-16'
+           ORDER BY pr.change_date DESC
+           FETCH FIRST 1 ROW ONLY
+       ), 10) AS price
+FROM (SELECT DISTINCT product_id FROM Products) p;
+
+
+PRODUCT_ID      PRICE
+---------- ----------
+         1         35
+         2         50
+         3         10
+
