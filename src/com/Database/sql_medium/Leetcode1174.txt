@@ -1,0 +1,58 @@
+================================================================================================================
+If the customer's preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+
+The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+
+Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
+================================================================================================================
+
+drop table delivery cascade constraint;
+
+create table delivery(
+delivery_id number unique,
+customer_id number,
+order_date date,
+customer_pref_delivery_date date
+);
+
+insert into delivery values(1, 1, date'2019-08-01', date'2019-08-02');
+insert into delivery values(2, 2, date'2019-08-02', date'2019-08-02');
+insert into delivery values(3, 1, date'2019-08-11', date'2019-08-12');
+insert into delivery values(4, 3, date'2019-08-24', date'2019-08-24');
+insert into delivery values(5, 3, date'2019-08-21', date'2019-08-22');
+insert into delivery values(6, 2, date'2019-08-11', date'2019-08-13');
+insert into delivery values(7, 4, date'2019-08-09', date'2019-08-09');
+commit;
+
+select * from delivery;
+
+DELIVERY_ID CUSTOMER_ID ORDER_DATE   CUSTOMER_PREF_DELIVERY_DATE
+----------- ----------- ------------ ------------------------------
+          1           1 01-AUG-19    02-AUG-19
+          2           2 02-AUG-19    02-AUG-19
+          3           1 11-AUG-19    12-AUG-19
+          4           3 24-AUG-19    24-AUG-19
+          5           3 21-AUG-19    22-AUG-19
+          6           2 11-AUG-19    13-AUG-19
+          7           4 09-AUG-19    09-AUG-19
+
+
+SELECT 
+    ROUND(
+        SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0 
+        / COUNT(*),
+        2
+    ) AS immediate_percentage
+FROM Delivery d
+JOIN (
+    SELECT customer_id, MIN(order_date) AS first_order_date
+    FROM Delivery
+    GROUP BY customer_id
+) f
+ON d.customer_id = f.customer_id 
+AND d.order_date = f.first_order_date;
+
+
+IMMEDIATE_PERCENTAGE
+--------------------
+                  50
