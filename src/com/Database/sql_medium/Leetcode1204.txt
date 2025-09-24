@@ -1,0 +1,72 @@
+===============================================================================================================
+There is a queue of people waiting to board a bus. However, the bus has a weight limit of 1000 kilograms, so there may be some people who cannot board.
+
+Write a solution to find the person_name of the last person that can fit on the bus without exceeding the weight limit. The test cases are generated such that the first person does not exceed the weight limit.
+
+Note that only one person can board the bus at any given turn.
+===============================================================================================================
+
+drop table queue cascade constraint;
+
+create table queue(
+person_id number unique,
+person_name varchar2(30),
+weight number,
+turn number
+);
+
+insert into queue values(5, 'Alice', 250, 1);
+insert into queue values(4, 'Bob', 175, 5);
+insert into queue values(3, 'Alex', 350, 2);
+insert into queue values(6, 'John Cena', 400, 3);
+insert into queue values(1, 'Winston', 500, 6);
+insert into queue values(2, 'Marie', 200, 4);
+
+commit;
+
+select * from queue;
+
+ PERSON_ID PERSON_NAME                        WEIGHT       TURN
+---------- ------------------------------ ---------- ----------
+         5 Alice                                 250          1
+         4 Bob                                   175          5
+         3 Alex                                  350          2
+         6 John Cena                             400          3
+         1 Winston                               500          6
+         2 Marie                                 200          4
+
+
+select person_id, person_name, weight, turn,
+sum(weight) over (order by turn) as total_weight
+from queue;
+
+ 
+ PERSON_ID PERSON_NAME                        WEIGHT       TURN TOTAL_WEIGHT
+---------- ------------------------------ ---------- ---------- ------------
+         5 Alice                                 250          1          250
+         3 Alex                                  350          2          600
+         6 John Cena                             400          3         1000
+         2 Marie                                 200          4         1200
+         4 Bob                                   175          5         1375
+         1 Winston                               500          6         1875
+
+
+SELECT person_name
+FROM (
+    SELECT 
+        person_id,
+        person_name,
+        weight,
+        turn,
+        SUM(weight) OVER (ORDER BY turn) AS total_weight
+    FROM Queue
+) q
+WHERE total_weight <= 1000
+ORDER BY total_weight DESC
+FETCH FIRST 1 ROW ONLY;
+
+
+PERSON_NAME
+------------------------------
+John Cena
+
